@@ -5,7 +5,7 @@ defmodule Teiserver.Game.LobbyServer do
   """
   use GenServer
   require Logger
-  alias Teiserver.{Connections}
+  alias Teiserver.{Connections, Account}
   alias Teiserver.Game.{Lobby, LobbyLib, LobbySummary}
   alias Teiserver.Connections.ClientLib
   alias Teiserver.Helpers.MapHelper
@@ -184,8 +184,19 @@ defmodule Teiserver.Game.LobbyServer do
           client.lobby_id != nil ->
             {false, "Already in a lobby"}
 
+          # Moderator short-circuit
+          Account.allow?(user_id, "moderator") ->
+            {true, nil}
+
+          # Approved player short-circuit
+          Enum.member?(lobby.approved_members, user_id) ->
+            {true, nil}
+
           lobby.password && lobby.password != password ->
             {false, "Incorrect password"}
+
+          lobby.locked? ->
+            {false, "Lobby is locked"}
 
           true ->
             {true, nil}

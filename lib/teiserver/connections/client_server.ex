@@ -129,7 +129,6 @@ defmodule Teiserver.Connections.ClientServer do
         %State{state | connections: new_connections}
       end
     else
-      Logger.error("#{__MODULE__} got :DOWN message but did not have it as a connection")
       state
     end
   end
