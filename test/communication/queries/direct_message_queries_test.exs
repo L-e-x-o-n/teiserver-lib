@@ -31,8 +31,8 @@ defmodule Teiserver.DirectMessageQueriesTest do
           where: [
             id: [1, 2],
             id: 1,
-            from_id: [Teiserver.uuid(), Teiserver.uuid()],
-            from_id: Teiserver.uuid(),
+            sender_id: [Teiserver.uuid(), Teiserver.uuid()],
+            sender_id: Teiserver.uuid(),
             to_id: [Teiserver.uuid(), Teiserver.uuid()],
             to_id: Teiserver.uuid(),
             to_or_from_id: [Teiserver.uuid(), Teiserver.uuid()],
@@ -45,7 +45,7 @@ defmodule Teiserver.DirectMessageQueriesTest do
             "Oldest first"
           ],
           preload: [
-            :from,
+            :sender,
             :to
           ]
         )

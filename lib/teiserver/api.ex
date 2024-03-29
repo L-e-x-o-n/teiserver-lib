@@ -248,7 +248,7 @@ defmodule Teiserver.Api do
   @doc section: :direct_message
   @spec send_direct_message(Teiserver.user_id(), Teiserver.user_id(), String.t()) ::
           {:ok, DirectMessage.t()} | {:error, Ecto.Changeset.t()}
-  defdelegate send_direct_message(from_id, to_id, content), to: DirectMessageLib
+  defdelegate send_direct_message(sender_id, to_id, content), to: DirectMessageLib
 
   @doc section: :direct_message
   @spec subscribe_to_user_messaging(User.id() | User.t()) :: :ok

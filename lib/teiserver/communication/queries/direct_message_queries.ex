@@ -55,27 +55,27 @@ defmodule Teiserver.Communication.DirectMessageQueries do
     )
   end
 
-  def _where(query, :from_id, from_id_list) when is_list(from_id_list) do
+  def _where(query, :sender_id, from_id_list) when is_list(from_id_list) do
     from(direct_messages in query,
-      where: direct_messages.from_id in ^from_id_list
+      where: direct_messages.sender_id in ^from_id_list
     )
   end
 
-  def _where(query, :from_id, from_id) do
+  def _where(query, :sender_id, sender_id) do
     from(direct_messages in query,
-      where: direct_messages.from_id == ^from_id
+      where: direct_messages.sender_id == ^sender_id
     )
   end
 
   def _where(query, :to_or_from_id, user_ids) when is_list(user_ids) do
     from(direct_messages in query,
-      where: direct_messages.from_id in ^user_ids or direct_messages.to_id in ^user_ids
+      where: direct_messages.sender_id in ^user_ids or direct_messages.to_id in ^user_ids
     )
   end
 
   def _where(query, :to_or_from_id, user_id) do
     from(direct_messages in query,
-      where: direct_messages.from_id == ^user_id or direct_messages.to_id == ^user_id
+      where: direct_messages.sender_id == ^user_id or direct_messages.to_id == ^user_id
     )
   end
 
@@ -127,10 +127,10 @@ defmodule Teiserver.Communication.DirectMessageQueries do
   end
 
   @spec _preload(Ecto.Query.t(), any) :: Ecto.Query.t()
-  def _preload(query, :from) do
+  def _preload(query, :sender) do
     from(direct_message in query,
-      left_join: froms in assoc(direct_message, :from),
-      preload: [from: froms]
+      left_join: senders in assoc(direct_message, :sender),
+      preload: [sender: senders]
     )
   end
 

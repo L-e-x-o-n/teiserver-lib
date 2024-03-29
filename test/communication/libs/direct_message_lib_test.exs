@@ -10,7 +10,7 @@ defmodule Teiserver.DirectMessageLibTest do
     %{
       content: "some content",
       inserted_at: Timex.now(),
-      from_id: AccountFixtures.user_fixture().id,
+      sender_id: AccountFixtures.user_fixture().id,
       to_id: AccountFixtures.user_fixture().id
     }
   end
@@ -19,7 +19,7 @@ defmodule Teiserver.DirectMessageLibTest do
     %{
       content: "some updated content",
       inserted_at: Timex.now(),
-      from_id: AccountFixtures.user_fixture().id,
+      sender_id: AccountFixtures.user_fixture().id,
       to_id: AccountFixtures.user_fixture().id
     }
   end
@@ -28,7 +28,7 @@ defmodule Teiserver.DirectMessageLibTest do
     %{
       content: nil,
       inserted_at: nil,
-      from_id: nil,
+      sender_id: nil,
       to_id: nil
     }
   end
@@ -58,7 +58,7 @@ defmodule Teiserver.DirectMessageLibTest do
 
       # Add a direct_message
       m1 = CommunicationFixtures.direct_message_fixture(to_id: user1.id)
-      m2 = CommunicationFixtures.direct_message_fixture(from_id: user1.id)
+      m2 = CommunicationFixtures.direct_message_fixture(sender_id: user1.id)
       _m3 = CommunicationFixtures.direct_message_fixture()
       assert Communication.list_direct_messages_for_user(user1.id) == [m1, m2]
     end
@@ -71,7 +71,7 @@ defmodule Teiserver.DirectMessageLibTest do
 
       # Add a direct_message
       m1 = CommunicationFixtures.direct_message_fixture(to_id: user1.id)
-      _m2 = CommunicationFixtures.direct_message_fixture(from_id: user1.id)
+      _m2 = CommunicationFixtures.direct_message_fixture(sender_id: user1.id)
       _m3 = CommunicationFixtures.direct_message_fixture()
       assert Communication.list_direct_messages_to_user(user1.id) == [m1]
     end
@@ -84,7 +84,7 @@ defmodule Teiserver.DirectMessageLibTest do
 
       # Add a direct_message
       _m1 = CommunicationFixtures.direct_message_fixture(to_id: user1.id)
-      m2 = CommunicationFixtures.direct_message_fixture(from_id: user1.id)
+      m2 = CommunicationFixtures.direct_message_fixture(sender_id: user1.id)
       _m3 = CommunicationFixtures.direct_message_fixture()
       assert Communication.list_direct_messages_from_user(user1.id) == [m2]
     end
@@ -98,10 +98,10 @@ defmodule Teiserver.DirectMessageLibTest do
 
       # Add a direct_message
       _m1 = CommunicationFixtures.direct_message_fixture(to_id: user1.id)
-      _m2 = CommunicationFixtures.direct_message_fixture(from_id: user1.id)
+      _m2 = CommunicationFixtures.direct_message_fixture(sender_id: user1.id)
       _m3 = CommunicationFixtures.direct_message_fixture()
-      m4 = CommunicationFixtures.direct_message_fixture(from_id: user1.id, to_id: user2.id)
-      _m5 = CommunicationFixtures.direct_message_fixture(from_id: user2.id, to_id: user1.id)
+      m4 = CommunicationFixtures.direct_message_fixture(sender_id: user1.id, to_id: user2.id)
+      _m5 = CommunicationFixtures.direct_message_fixture(sender_id: user2.id, to_id: user1.id)
       assert Communication.list_direct_messages_from_user_to_user(user1.id, user2.id) == [m4]
     end
 
@@ -114,10 +114,10 @@ defmodule Teiserver.DirectMessageLibTest do
 
       # Add a direct_message
       _m1 = CommunicationFixtures.direct_message_fixture(to_id: user1.id)
-      _m2 = CommunicationFixtures.direct_message_fixture(from_id: user1.id)
+      _m2 = CommunicationFixtures.direct_message_fixture(sender_id: user1.id)
       _m3 = CommunicationFixtures.direct_message_fixture()
-      m4 = CommunicationFixtures.direct_message_fixture(from_id: user1.id, to_id: user2.id)
-      m5 = CommunicationFixtures.direct_message_fixture(from_id: user2.id, to_id: user1.id)
+      m4 = CommunicationFixtures.direct_message_fixture(sender_id: user1.id, to_id: user2.id)
+      m5 = CommunicationFixtures.direct_message_fixture(sender_id: user2.id, to_id: user1.id)
       assert Communication.list_direct_messages_between_users(user1.id, user2.id) == [m4, m5]
     end
 
@@ -215,7 +215,7 @@ defmodule Teiserver.DirectMessageLibTest do
                    content: "First direct message",
                    inserted_at: _,
                    delivered?: false,
-                   from_id: ^user1_id,
+                   sender_id: ^user1_id,
                    to_id: ^user2_id
                  }
                },
@@ -233,7 +233,7 @@ defmodule Teiserver.DirectMessageLibTest do
                    content: "First direct message",
                    inserted_at: _,
                    delivered?: false,
-                   from_id: ^user1_id,
+                   sender_id: ^user1_id,
                    to_id: ^user2_id
                  }
                },
@@ -256,7 +256,7 @@ defmodule Teiserver.DirectMessageLibTest do
                    content: "Second direct message",
                    inserted_at: _,
                    delivered?: false,
-                   from_id: ^user2_id,
+                   sender_id: ^user2_id,
                    to_id: ^user1_id
                  }
                },
@@ -272,7 +272,7 @@ defmodule Teiserver.DirectMessageLibTest do
                    content: "Third direct message",
                    inserted_at: _,
                    delivered?: false,
-                   from_id: ^user1_id,
+                   sender_id: ^user1_id,
                    to_id: ^user2_id
                  }
                },
@@ -291,7 +291,7 @@ defmodule Teiserver.DirectMessageLibTest do
                    content: "Second direct message",
                    inserted_at: _,
                    delivered?: false,
-                   from_id: ^user2_id,
+                   sender_id: ^user2_id,
                    to_id: ^user1_id
                  }
                },
@@ -307,7 +307,7 @@ defmodule Teiserver.DirectMessageLibTest do
                    content: "Third direct message",
                    inserted_at: _,
                    delivered?: false,
-                   from_id: ^user1_id,
+                   sender_id: ^user1_id,
                    to_id: ^user2_id
                  }
                },

@@ -47,7 +47,7 @@ defmodule Teiserver.CommunicationFixtures do
         inserted_at: data[:inserted_at] || Timex.now(),
         delivered?: data[:delivered?] || false,
         read?: data[:read?] || false,
-        from_id: data[:from_id] || user_fixture().id,
+        sender_id: data[:sender_id] || user_fixture().id,
         to_id: data[:to_id] || user_fixture().id
       }
     )

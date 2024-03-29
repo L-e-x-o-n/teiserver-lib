@@ -1,7 +1,7 @@
 defmodule Teiserver.MatchLibAsyncTest do
   @moduledoc false
   alias Teiserver.Game.Match
-  use Teiserver.Case, async: true
+  use Teiserver.Case, async: false
 
   alias Teiserver.{Game, Connections}
   alias Teiserver.{GameFixtures, AccountFixtures, ConnectionFixtures}

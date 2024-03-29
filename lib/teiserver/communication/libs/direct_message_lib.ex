@@ -45,11 +45,11 @@ defmodule Teiserver.Communication.DirectMessageLib do
   """
   @spec send_direct_message(Teiserver.user_id(), Room.id(), String.t(), map()) ::
           {:ok, RoomMessage.t()} | {:error, Ecto.Changeset.t()}
-  def send_direct_message(from_id, to_id, content, attrs \\ %{}) do
+  def send_direct_message(sender_id, to_id, content, attrs \\ %{}) do
     attrs =
       Map.merge(
         %{
-          from_id: from_id,
+          sender_id: sender_id,
           to_id: to_id,
           content: content,
           inserted_at: Timex.now()
@@ -60,7 +60,7 @@ defmodule Teiserver.Communication.DirectMessageLib do
     case create_direct_message(attrs) do
       {:ok, direct_message} ->
         Teiserver.broadcast(
-          user_messaging_topic(direct_message.from_id),
+          user_messaging_topic(direct_message.sender_id),
           %{
             event: :message_sent,
             direct_message: direct_message
@@ -154,7 +154,7 @@ defmodule Teiserver.Communication.DirectMessageLib do
   def list_direct_messages_from_user(user_id, query_args \\ []) do
     query_args
     |> DirectMessageQueries.direct_message_query()
-    |> DirectMessageQueries.do_where(from_id: user_id)
+    |> DirectMessageQueries.do_where(sender_id: user_id)
     |> Repo.all()
   end
 
@@ -163,7 +163,7 @@ defmodule Teiserver.Communication.DirectMessageLib do
 
   ## Examples
 
-      iex> list_direct_messages_from_user_to_user(from_id, to_id)
+      iex> list_direct_messages_from_user_to_user(sender_id, to_id)
       [%DirectMessage{}, ...]
 
   """
@@ -173,11 +173,11 @@ defmodule Teiserver.Communication.DirectMessageLib do
           Teiserver.query_args()
         ) ::
           [DirectMessage.t()]
-  def list_direct_messages_from_user_to_user(from_id, to_id, query_args \\ []) do
+  def list_direct_messages_from_user_to_user(sender_id, to_id, query_args \\ []) do
     query_args
     |> DirectMessageQueries.direct_message_query()
     |> DirectMessageQueries.do_where(
-      from_id: from_id,
+      sender_id: sender_id,
       to_id: to_id
     )
     |> Repo.all()
@@ -207,7 +207,7 @@ defmodule Teiserver.Communication.DirectMessageLib do
     query_args
     |> DirectMessageQueries.direct_message_query()
     |> DirectMessageQueries.do_where(
-      from_id: [user_id1, user_id2],
+      sender_id: [user_id1, user_id2],
       to_id: [user_id1, user_id2]
     )
     |> Repo.all()

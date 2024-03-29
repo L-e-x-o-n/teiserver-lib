@@ -147,7 +147,7 @@ defmodule Teiserver.Migrations.Postgres.V01 do
       add(:delivered?, :boolean)
       add(:read?, :boolean)
 
-      add(:from_id, references(:account_users, on_delete: :nothing, type: :uuid), type: :uuid)
+      add(:sender_id, references(:account_users, on_delete: :nothing, type: :uuid), type: :uuid)
       add(:to_id, references(:account_users, on_delete: :nothing, type: :uuid), type: :uuid)
     end
 

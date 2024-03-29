@@ -9,19 +9,19 @@ defmodule Teiserver.Communication.DirectMessage do
   * `:inserted_at` - The datetime the message was sent
   * `:delivered?` - Tracks if the message has been delivered to the user or not
   * `:read?` - Tracks if the message has been read by the user or not
-  * `:from_id` - The `Teiserver.Account.User` who sent the message
+  * `:sender_id` - The `Teiserver.Account.User` who sent the message
   * `:to_id` - The `Teiserver.Account.User` the message was sent to
   """
   use TeiserverMacros, :schema
 
-  @derive {Jason.Encoder, only: ~w(content inserted_at delivered? read? from_id to_id)a}
+  @derive {Jason.Encoder, only: ~w(content inserted_at delivered? read? sender_id to_id)a}
   schema "communication_direct_messages" do
     field(:content, :string)
     field(:inserted_at, :utc_datetime)
     field(:delivered?, :boolean, default: false)
     field(:read?, :boolean, default: false)
 
-    belongs_to(:from, Teiserver.Account.User, type: Ecto.UUID)
+    belongs_to(:sender, Teiserver.Account.User, type: Ecto.UUID)
     belongs_to(:to, Teiserver.Account.User, type: Ecto.UUID)
   end
 
@@ -33,7 +33,7 @@ defmodule Teiserver.Communication.DirectMessage do
           inserted_at: DateTime.t(),
           delivered?: boolean,
           read?: boolean,
-          from_id: Teiserver.user_id(),
+          sender_id: Teiserver.user_id(),
           to_id: Teiserver.user_id()
         }
 
@@ -42,7 +42,7 @@ defmodule Teiserver.Communication.DirectMessage do
   @spec changeset(map(), map()) :: Ecto.Changeset.t()
   def changeset(struct, attrs \\ %{}) do
     struct
-    |> cast(attrs, ~w(content inserted_at delivered? read? from_id to_id)a)
-    |> validate_required(~w(content inserted_at delivered? read? from_id to_id)a)
+    |> cast(attrs, ~w(content inserted_at delivered? read? sender_id to_id)a)
+    |> validate_required(~w(content inserted_at delivered? read? sender_id to_id)a)
   end
 end

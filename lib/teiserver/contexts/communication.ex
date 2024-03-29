@@ -163,13 +163,13 @@ defmodule Teiserver.Communication do
 
   @doc section: :direct_message
   @spec send_direct_message(
-          from_id :: Teiserver.user_id(),
+          sender_id :: Teiserver.user_id(),
           to_id :: Teiserver.user_id(),
           content :: String.t(),
           attrs :: map()
         ) ::
           {:ok, DirectMessage.t()} | {:error, Ecto.Changeset.t()}
-  defdelegate send_direct_message(from_id, to_id, content, attrs \\ %{}), to: DirectMessageLib
+  defdelegate send_direct_message(sender_id, to_id, content, attrs \\ %{}), to: DirectMessageLib
 
   @doc section: :direct_message
   @spec list_direct_messages_from_user_to_user(Teiserver.user_id(), Teiserver.user_id()) :: [
@@ -180,7 +180,7 @@ defmodule Teiserver.Communication do
           Teiserver.user_id(),
           Teiserver.query_args()
         ) :: [DirectMessage.t()]
-  defdelegate list_direct_messages_from_user_to_user(from_id, to_id, query_args \\ []),
+  defdelegate list_direct_messages_from_user_to_user(sender_id, to_id, query_args \\ []),
     to: DirectMessageLib
 
   @doc section: :direct_message
