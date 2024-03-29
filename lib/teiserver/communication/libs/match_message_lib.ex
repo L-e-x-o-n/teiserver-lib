@@ -82,6 +82,10 @@ defmodule Teiserver.Communication.MatchMessageLib do
             match_message: match_message
           }
         )
+        {:ok, match_message}
+
+      err ->
+        err
 
     end
   end
