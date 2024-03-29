@@ -4,6 +4,7 @@ defmodule Teiserver.Communication.MatchMessageLib do
   """
   use TeiserverMacros, :library
   alias Teiserver.Communication.{MatchMessage, MatchMessageQueries}
+  alias Teiserver.Game
   alias Teiserver.Game.Match
 
   @doc false
@@ -38,15 +39,51 @@ defmodule Teiserver.Communication.MatchMessageLib do
 
   ## Examples
 
-      iex> list_recent_match_messages(123)
+      iex> list_recent_match_messages("uuid")
       [%MatchMessage{}, ...]
 
-      iex> list_recent_match_messages(456)
+      iex> list_recent_match_messages("uuid")
       []
   """
   @spec list_recent_match_messages(Match.id(), non_neg_integer()) :: [MatchMessage.t()]
   def list_recent_match_messages(match_id, limit \\ 50) when is_binary(match_id) do
     list_match_messages(where: [match_id: match_id], limit: limit, order_by: ["Newest first"])
+  end
+
+
+  @doc """
+  Wraps `send_match_message/3` to send a message when in the lobby instead of the match
+
+    - Creates a match message
+    - If successful generate a pubsub message for both the Match and the Lobby
+
+    ## Examples
+
+        iex> send_lobby_message("uuid", "uuid", "Message content")
+        {:ok, %MatchMessage{}}
+
+        iex> send_lobby_message("uuid", "uuid", "Message content")
+        {:error, %Ecto.Changeset{}}
+  """
+  @spec send_lobby_message(Teiserver.user_id(), Lobby.id(), String.t()) ::
+          {:ok, MatchMessage.t()} | {:error, Ecto.Changeset.t()}
+  def send_lobby_message(sender_id, lobby_id, content) do
+    match_id = Game.get_lobby_attribute(lobby_id, :match_id)
+
+    case send_match_message(sender_id, match_id, content) do
+      {:ok, match_message} ->
+        topic = Game.lobby_topic(lobby_id)
+
+        Teiserver.broadcast(
+          topic,
+          %{
+            event: :message_received,
+            lobby_id: lobby_id,
+            match_message: match_message
+          }
+        )
+
+    end
   end
 
   @doc """
@@ -55,10 +92,10 @@ defmodule Teiserver.Communication.MatchMessageLib do
 
     ## Examples
 
-        iex> send_match_message(123, 123, "Message content")
+        iex> send_match_message("uuid", "uuid", "Message content")
         {:ok, %MatchMessage{}}
 
-        iex> send_match_message(456, 456, "Message content")
+        iex> send_match_message("uuid", "uuid", "Message content")
         {:error, %Ecto.Changeset{}}
   """
   @spec send_match_message(Teiserver.user_id(), Match.id(), String.t()) ::
@@ -85,6 +122,7 @@ defmodule Teiserver.Communication.MatchMessageLib do
           topic,
           %{
             event: :message_received,
+            match_id: match_id,
             match_message: match_message
           }
         )
@@ -119,10 +157,10 @@ defmodule Teiserver.Communication.MatchMessageLib do
 
   ## Examples
 
-      iex> get_match_message!(123)
+      iex> get_match_message!("uuid")
       %MatchMessage{}
 
-      iex> get_match_message!(456)
+      iex> get_match_message!("uuid")
       ** (Ecto.NoResultsError)
 
   """
@@ -141,10 +179,10 @@ defmodule Teiserver.Communication.MatchMessageLib do
 
   ## Examples
 
-      iex> get_match_message(123)
+      iex> get_match_message("uuid")
       %MatchMessage{}
 
-      iex> get_match_message(456)
+      iex> get_match_message("uuid")
       nil
 
   """

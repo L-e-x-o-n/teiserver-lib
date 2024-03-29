@@ -239,6 +239,11 @@ defmodule Teiserver.Communication do
   defdelegate send_match_message(sender_id, match_id, content, attrs \\ %{}), to: MatchMessageLib
 
   @doc section: :match_message
+  @spec send_lobby_message(Teiserver.user_id(), Lobby.id(), String.t()) ::
+          {:ok, MatchMessage.t()} | {:error, Ecto.Changeset.t()}
+  defdelegate send_lobby_message(sender_id, lobby_id, content), to: MatchMessageLib
+
+  @doc section: :match_message
   @spec list_recent_match_messages(Match.id(), non_neg_integer()) :: [MatchMessage.t()]
   defdelegate list_recent_match_messages(match_name_or_id, limit \\ 50), to: MatchMessageLib
 

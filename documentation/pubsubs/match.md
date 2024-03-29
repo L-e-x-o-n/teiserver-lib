@@ -48,6 +48,15 @@ Indicating a user has left the lobby
 }
 ```
 
+### Message received - `:message_received`
+A message has been sent in the match chat.
+```elixir
+%{
+  event: :message_received,
+  lobby_id: Lobby.id(),
+  match_message: MatchMessage.t()
+}
+```
 
 ### Client state change - `:lobby_client_change`
 Note this will be sent in addition to normal client updated messages but by doing this we prevent people having to subscribe/unsubscribe from client update messages.

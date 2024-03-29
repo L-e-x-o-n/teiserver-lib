@@ -217,6 +217,11 @@ defmodule Teiserver.Api do
           {:ok, MatchMessage.t()} | {:error, Ecto.Changeset.t()}
   defdelegate send_match_message(sender_id, match_id, content), to: MatchMessageLib
 
+  @doc section: :match_message
+  @spec send_lobby_message(Teiserver.user_id(), Lobby.id(), String.t()) ::
+          {:ok, MatchMessage.t()} | {:error, Ecto.Changeset.t()}
+  defdelegate send_lobby_message(sender_id, lobby_id, content), to: MatchMessageLib
+
   # Room and RoomMessage
   @doc section: :room_message
   @spec subscribe_to_room_messages(Room.id() | Room.t()) :: :ok
