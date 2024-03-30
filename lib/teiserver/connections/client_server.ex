@@ -24,7 +24,7 @@ defmodule Teiserver.Connections.ClientServer do
   end
 
   @standard_data_keys ~w(connected? last_disconnected in_game? afk? party_id)a
-  @lobby_data_keys ~w(ready? player? player_number team_number team_colour sync lobby_host?)a
+  @lobby_data_keys ~w(ready? player? player_number team_number player_colour sync lobby_host?)a
 
   @impl true
   def handle_call(:get_client_state, _from, state) do

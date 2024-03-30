@@ -259,7 +259,7 @@ defmodule Teiserver.Game.LobbyServer do
       player?: false,
       player_number: nil,
       team_number: nil,
-      team_colour: nil,
+      player_colour: nil,
       sync: nil,
       lobby_host?: false
     }, "joined_lobby")
@@ -294,7 +294,7 @@ defmodule Teiserver.Game.LobbyServer do
       player?: false,
       player_number: nil,
       team_number: nil,
-      team_colour: nil,
+      player_colour: nil,
       sync: nil,
       lobby_host?: false
     }, "left_lobby")

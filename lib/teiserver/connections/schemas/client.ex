@@ -15,7 +15,7 @@ defmodule Teiserver.Connections.Client do
   * `:player?` - When in a lobby or match, set to true if the client is playing and false if not (e.g. spectator)
   * `:player_number` - The numerical ID of the player within a lobby or match
   * `:team_number` - The numerical ID of the team the player is present on within a lobby or match
-  * `:team_colour` - The colour used to represent this client, it is a freeform string so you are able to extend and overload this as you see fit
+  * `:player_colour` - The colour used to represent this client, it is a freeform string so you are able to extend and overload this as you see fit
   * `:sync` - A map used for storing keys of items the client needs to sync and the values representing their state of syncing
   * `:lobby_host?` - Set to true if the client is the host of the lobby in question
   * `:party_id` - The ID of the party the client is part of or nil if not in a party
@@ -27,7 +27,7 @@ defmodule Teiserver.Connections.Client do
 
   @derive {Jason.Encoder,
            only:
-             ~w(id connected? last_disconnected afk? party_id in_game? lobby_id ready? player? player_number team_number team_colour sync lobby_host? update_id)a}
+             ~w(id connected? last_disconnected afk? party_id in_game? lobby_id ready? player? player_number team_number player_colour sync lobby_host? update_id)a}
   typedstruct do
     field(:id, Teiserver.user_id())
     field(:connected?, boolean, default: false)
@@ -43,7 +43,7 @@ defmodule Teiserver.Connections.Client do
     field(:player?, boolean, default: false)
     field(:player_number, non_neg_integer())
     field(:team_number, non_neg_integer())
-    field(:team_colour, String.t())
+    field(:player_colour, String.t())
     field(:sync, map | nil)
     field(:lobby_host?, boolean, default: false)
 
