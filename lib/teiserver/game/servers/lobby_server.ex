@@ -7,7 +7,7 @@ defmodule Teiserver.Game.LobbyServer do
   require Logger
   alias Teiserver.{Connections, Account}
   alias Teiserver.Game.{Lobby, LobbyLib, LobbySummary}
-  alias Teiserver.Connections.ClientLib
+  alias Teiserver.Connections.{Client, ClientLib}
   alias Teiserver.Helpers.MapHelper
 
   @heartbeat_frequency_ms 5_000
@@ -34,10 +34,6 @@ defmodule Teiserver.Game.LobbyServer do
     {:reply, can_add_client({user_id, password}, state), state}
   end
 
-  def handle_call({:client_update_request, %{id: _user_id} = changes}, _from, state) do
-    {:reply, changes, state}
-  end
-
   # Attempts to add a client to the lobby
   def handle_call({:add_client, user_id}, _from, state) do
     case can_add_client({user_id, state.lobby.password}, state) do
@@ -60,6 +56,12 @@ defmodule Teiserver.Game.LobbyServer do
     new_state = update_lobby(state, changes)
     {:noreply, new_state}
   end
+
+  def handle_cast({:client_update_request, new_client, diffs, reason}, state) do
+    state = client_update_request(state, new_client, diffs, reason)
+    {:noreply, state}
+  end
+
 
   def handle_cast({:remove_client, user_id}, state) do
     if Enum.member?(state.lobby.members, user_id) do
@@ -146,7 +148,7 @@ defmodule Teiserver.Game.LobbyServer do
           %{}
       end
 
-    if changes == %{} do
+    if Enum.empty?(changes) do
       {:noreply, state}
     else
       new_state = update_lobby(state, changes)
@@ -204,6 +206,17 @@ defmodule Teiserver.Game.LobbyServer do
     end
   end
 
+  @spec client_update_request(State.t(), Client.t(), map(), State.t()) :: State.t()
+  defp client_update_request(state, new_client, _diffs, reason) do
+    # Currently we just say yes so we pass-through the client
+    resulting_client = new_client
+
+    # Assuming there are still some changes, send them over to be implemented!
+    ClientLib.do_update_client_in_lobby(new_client.id, resulting_client, reason)
+
+    state
+  end
+
   @spec update_lobby(State.t(), map()) :: State.t()
   def update_lobby(state, changes) do
     new_lobby = state.lobby
@@ -217,7 +230,7 @@ defmodule Teiserver.Game.LobbyServer do
   defp do_update_lobby(%State{} = state, %Lobby{} = new_lobby) do
     diffs = MapHelper.map_diffs(state.lobby, new_lobby)
 
-    if diffs == %{} do
+    if Enum.empty?(diffs) do
       # Nothing changed, we don't do anything
       state
     else
@@ -253,7 +266,7 @@ defmodule Teiserver.Game.LobbyServer do
   defp do_add_client(user_id, state) do
     shared_secret = Teiserver.Account.generate_password()
 
-    ClientLib.update_client_full(user_id, %{
+    ClientLib.update_client(user_id, %{
       lobby_id: state.lobby_id,
       ready?: false,
       player?: false,
@@ -288,7 +301,7 @@ defmodule Teiserver.Game.LobbyServer do
   defp do_remove_client(user_id, state) do
     Connections.unsubscribe_from_client(user_id)
 
-    ClientLib.update_client_full(user_id, %{
+    ClientLib.update_client(user_id, %{
       lobby_id: nil,
       ready?: false,
       player?: false,

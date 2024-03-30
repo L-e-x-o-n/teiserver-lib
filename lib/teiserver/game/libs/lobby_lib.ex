@@ -218,7 +218,7 @@ defmodule Teiserver.Game.LobbyLib do
       true ->
         with {:ok, lobby} <- start_lobby_server(host_id, name),
              :ok <- cycle_lobby(lobby.id),
-             _ <- ClientLib.update_client_full(host_id, %{lobby_id: lobby.id, lobby_host?: true}, "opened lobby") do
+             _ <- ClientLib.update_client(host_id, %{lobby_id: lobby.id, lobby_host?: true}, "opened lobby") do
           {:ok, lobby.id}
         else
           :failure1 -> :fail_result1
@@ -282,9 +282,9 @@ defmodule Teiserver.Game.LobbyLib do
       iex> client_update_request(%{team_number: 1, id: 456}, 456)
       nil
   """
-  @spec client_update_request(map(), Lobby.id()) :: map()
-  def client_update_request(changes, lobby_id) when is_binary(lobby_id) do
-    call_lobby(lobby_id, {:client_update_request, changes})
+  @spec client_update_request(Lobby.id(), Client.t(), map(), String.t()) :: map()
+  def client_update_request(lobby_id, new_client, diffs, reason) when is_binary(lobby_id) do
+    cast_lobby(lobby_id, {:client_update_request, new_client, diffs, reason})
   end
 
   @doc """
@@ -303,10 +303,10 @@ defmodule Teiserver.Game.LobbyLib do
     if lobby do
       lobby.members
       |> Enum.each(fn user_id ->
-        ClientLib.update_client_full(user_id, %{lobby_id: nil, lobby_host?: false}, "lobby closed")
+        ClientLib.update_client(user_id, %{lobby_id: nil, lobby_host?: false}, "lobby closed")
       end)
 
-      ClientLib.update_client_full(lobby.host_id, %{lobby_id: nil, lobby_host?: false}, "closed lobby")
+      ClientLib.update_client(lobby.host_id, %{lobby_id: nil, lobby_host?: false}, "closed lobby")
     end
 
     stop_lobby_server(lobby_id)

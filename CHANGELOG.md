@@ -1,3 +1,7 @@
+## v0.0.5
+- Swapped `team_colour` for `player_colour`
+- Refactored the client update process
+
 ## v0.0.4
 - Added `Lobby`, `LobbySummary`, `MatchType`, `Match`, `MatchMembership`, `MatchSettingType`, `MatchSetting` schemas, libs and queries
 - Added pubsub events for clients connecting, disconnecting and process destruction

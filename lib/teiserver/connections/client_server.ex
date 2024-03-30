@@ -23,9 +23,6 @@ defmodule Teiserver.Connections.ClientServer do
     defstruct [:client, :user_id, :connections, :client_topic, :lobby_topic]
   end
 
-  @standard_data_keys ~w(connected? last_disconnected in_game? afk? party_id)a
-  @lobby_data_keys ~w(ready? player? player_number team_number player_colour sync lobby_host?)a
-
   @impl true
   def handle_call(:get_client_state, _from, state) do
     {:reply, state.client, state}
@@ -56,35 +53,31 @@ defmodule Teiserver.Connections.ClientServer do
   end
 
   def handle_cast({:update_client, partial_client, reason}, state) do
-    partial_client = Map.take(partial_client, @standard_data_keys)
-
-    if partial_client != %{} do
+    if Enum.empty?(partial_client) do
+      {:noreply, state}
+    else
       new_client = struct(state.client, partial_client)
       new_state = update_client(state, new_client, reason)
       {:noreply, new_state}
-    else
-      {:noreply, state}
     end
   end
 
   def handle_cast({:update_client_in_lobby, partial_client, reason}, state) do
-    partial_client =
-      partial_client
-      |> Map.take(@lobby_data_keys)
-      |> Map.put(:id, state.user_id)
-      |> LobbyLib.client_update_request(state.client.lobby_id)
-
-    if partial_client != %{} do
-      new_client = struct(state.client, partial_client)
-      new_state = update_client(state, new_client, reason)
-      {:noreply, new_state}
+    if Enum.empty?(partial_client) or state.client.lobby_id == nil do
+      {:noreply, state}
     else
+      new_client = struct(state.client, partial_client)
+      diffs = MapHelper.map_diffs(state.client, new_client)
+
+      if not Enum.empty?(diffs) do
+        LobbyLib.client_update_request(state.client.lobby_id, new_client, diffs, reason)
+      end
+
       {:noreply, state}
     end
   end
 
-  def handle_cast({:update_client_full, partial_client, reason}, state) do
-    new_client = struct(state.client, partial_client)
+  def handle_cast({:do_update_client_in_lobby, new_client, reason}, state) do
     new_state = update_client(state, new_client, reason)
     {:noreply, new_state}
   end
@@ -143,7 +136,7 @@ defmodule Teiserver.Connections.ClientServer do
   defp update_client(%State{} = state, %Client{} = new_client, reason) do
     diffs = MapHelper.map_diffs(state.client, new_client)
 
-    if diffs == %{} do
+    if Enum.empty?(diffs) do
       # Nothing changed, we don't do anything
       state
     else

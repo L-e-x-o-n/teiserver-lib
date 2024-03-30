@@ -94,16 +94,16 @@ defmodule Teiserver.Connections.ClientLib do
   end
 
   @doc """
-  Updates a client with the new data (excluding lobby related details). If changes are made then it will also generate a `Teiserver.Connections.Client:{user_id}` pubsub message.
+  Updates a client with the new data (excluding lobby related details). If changes are made then it will also generate a `Teiserver.Connections.Client:{user_id}` pubsub message; if they are present in a lobby it will generate a similar message to `Teiserver.Game.Lobby:{lobby_id}`.
 
   Returns nil if the Client does not exist, :ok if the client does.
 
   ## Examples
 
-      iex> update_client(123, %{afk?: false})
+      iex> update_client(123, %{afk?: false}, "some reason")
       :ok
 
-      iex> update_client(456, %{afk?: false})
+      iex> update_client(456, %{afk?: false}, "some reason")
       nil
 
   """
@@ -113,16 +113,18 @@ defmodule Teiserver.Connections.ClientLib do
   end
 
   @doc """
-  Updates a client with the new data for their lobby presence. If changes are made then it will also generate a `Teiserver.Connections.Client:{user_id}` pubsub message and a `Teiserver.Game.Lobby:{lobby_id}` pubsub message.
+  Similar to `update_client/3`, in the ClientServer it will first validate the update is acceptable and then send it off to the LobbyServer allowing it to change the update as it sees fit. Depending on other factors the LobbyServer may call out to the lobby host for further input.
+
+  If the LobbyServer accepts any changes it will contact the ClientServer accordingly.
 
   Returns nil if the Client does not exist, :ok if the client does.
 
   ## Examples
 
-      iex> update_client_in_lobby(123, %{player_number: 123})
+      iex> update_client_in_lobby(123, %{player_number: 123}, "some reason")
       :ok
 
-      iex> update_client_in_lobby(456, %{player_number: 123})
+      iex> update_client_in_lobby(456, %{player_number: 123}, "some reason")
       nil
 
   """
@@ -131,23 +133,11 @@ defmodule Teiserver.Connections.ClientLib do
     cast_client(user_id, {:update_client_in_lobby, data, reason})
   end
 
-  @doc """
-  Updates a client with the new data for any and all keys (so be careful not to break things like lobby memberships).
-
-  Returns nil if the Client does not exist, :ok if the client does.
-
-  ## Examples
-
-      iex> update_client_full(123, %{player_number: 123})
-      :ok
-
-      iex> update_client_full(456, %{player_number: 123})
-      nil
-
-  """
-  @spec update_client_full(Teiserver.user_id(), map, String.t()) :: :ok | nil
-  def update_client_full(user_id, data, reason) do
-    cast_client(user_id, {:update_client_full, data, reason})
+  # Used by the LobbyServer to update the ClientServer if `update_client_in_lobby/4` is successful
+  @doc false
+  @spec do_update_client_in_lobby(Teiserver.user_id(), map, String.t()) :: :ok | nil
+  def do_update_client_in_lobby(user_id, data, reason) do
+    cast_client(user_id, {:do_update_client_in_lobby, data, reason})
   end
 
   @doc """
