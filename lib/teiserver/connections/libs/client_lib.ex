@@ -162,7 +162,7 @@ defmodule Teiserver.Connections.ClientLib do
   end
 
   @doc """
-
+  Sends a `:disconnect` message to every connection for the client and then stops the ClientServer
   """
   @spec disconnect_user(Teiserver.user_id()) :: :ok
   def disconnect_user(user_id) do
@@ -173,6 +173,17 @@ defmodule Teiserver.Connections.ClientLib do
 
     :timer.sleep(1000)
     stop_client_server(user_id)
+  end
+
+  @doc """
+  Sends the calling process a `:disconnect` message and informs the ClientServer it is
+  an intentional disconnect. This means if it is the last connection for the client the ClientServer
+  will stop itself rather than going into a disconnected state.
+  """
+  @spec disconnect_single_connection(Teiserver.user_id()) :: :ok
+  def disconnect_single_connection(user_id) do
+    cast_client(user_id, {:purposeful_disconnect, self()})
+    send(self(), :disconnect)
   end
 
   # Process stuff

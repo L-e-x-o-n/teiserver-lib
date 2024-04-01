@@ -82,6 +82,18 @@ defmodule Teiserver.Connections.ClientServer do
     {:noreply, new_state}
   end
 
+  # Unlike with a normal :DOWN message, this is one where the person purposefully disconnects
+  # and thus we don't want to keep the client alive
+  def handle_cast({:purposeful_disconnect, pid}, state) do
+    new_state = lose_connection(pid, state)
+    if new_state.client.connected? do
+      {:noreply, new_state}
+    else
+      ClientLib.stop_client_server(state.user_id)
+      {:noreply, new_state}
+    end
+  end
+
   @impl true
   def handle_info(:heartbeat, %State{client: %{connected?: false}} = state) do
     seconds_since_disconnect = Timex.diff(Timex.now(), state.client.last_disconnected, :second)
