@@ -233,6 +233,7 @@ defmodule Teiserver.MixProject do
       {:typedstruct, "~> 0.5.2", runtime: false},
       {:horde, "~> 0.9"},
       {:uuid, "~> 1.1"},
+      {:cachex, "~> 3.6"},
 
       # Dev and Test stuff
       {:ex_doc, "~> 0.31", only: :dev, runtime: false},

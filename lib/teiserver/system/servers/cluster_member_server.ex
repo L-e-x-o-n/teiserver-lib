@@ -70,7 +70,6 @@ defmodule Teiserver.System.ClusterManager do
 
       {:noreply, :running}
     else
-      Logger.warning("")
       Process.send_after(self(), {:startup, start_count + 1}, @startup_delay * start_count)
       {:noreply, :pending}
     end

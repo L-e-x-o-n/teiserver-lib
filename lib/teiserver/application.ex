@@ -27,7 +27,7 @@ defmodule Teiserver.Application do
       # Lobbies
       {DynamicSupervisor, strategy: :one_for_one, name: Teiserver.LobbySupervisor},
       {Horde.Registry, [keys: :unique, members: :auto, name: Teiserver.LobbyRegistry]},
-      {Registry, [keys: :unique, members: :auto, name: Teiserver.LocalLobbyRegistry]}
+      {Registry, [keys: :unique, members: :auto, name: Teiserver.LocalLobbyRegistry]},
 
       # Matchmaking
       # {DynamicSupervisor, strategy: :one_for_one, name: Teiserver.MMSupervisor},
@@ -35,6 +35,21 @@ defmodule Teiserver.Application do
       # {Horde.Registry, [keys: :unique, members: :auto, name: Teiserver.MMMatchRegistry]},
       # {Registry, [keys: :unique, members: :auto, name: Teiserver.LocalMMQueueRegistry]},
       # {Registry, [keys: :unique, members: :auto, name: Teiserver.LocalMMMatchRegistry]}
+
+      # DB Lookup caches
+      add_cache(:ts_user_by_user_id_cache, [ttl: :timer.seconds(1)]),
+
+      # Telemetry caches
+      add_cache(:ts_property_types_cache),
+      add_cache(:ts_simple_client_event_types_cache),
+      add_cache(:ts_complex_client_event_types_cache),
+      add_cache(:ts_simple_lobby_event_types_cache),
+      add_cache(:ts_complex_lobby_event_types_cache),
+      add_cache(:ts_simple_match_event_types_cache),
+      add_cache(:ts_complex_match_event_types_cache),
+      add_cache(:ts_simple_server_event_types_cache),
+      add_cache(:ts_complex_server_event_types_cache),
+      add_cache(:ts_account_smurf_key_types),
     ]
 
     opts = [strategy: :one_for_one, name: __MODULE__]
@@ -45,5 +60,19 @@ defmodule Teiserver.Application do
     end
 
     start_result
+  end
+
+  @spec add_cache(atom) :: map()
+  @spec add_cache(atom, list) :: map()
+  defp add_cache(name, opts \\ []) when is_atom(name) do
+    %{
+      id: name,
+      start:
+        {Cachex, :start_link,
+          [
+            name,
+            opts
+          ]}
+    }
   end
 end
