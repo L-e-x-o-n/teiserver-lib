@@ -194,7 +194,17 @@ defmodule Teiserver.Account.UserLib do
   def update_user(%User{} = user, attrs) do
     User.changeset(user, attrs, :full)
     |> Teiserver.Repo.update()
+    |> maybe_decache_user()
   end
+
+  # Clears the cache for a user after a successful database option
+  @spec maybe_decache_user(any()) :: any()
+  defp maybe_decache_user({:ok, user}) do
+    Teiserver.invalidate_cache(:ts_user_by_user_id_cache, user.id)
+    {:ok, user}
+  end
+
+  defp maybe_decache_user(v), do: v
 
   @doc """
   Updates a user's password.
@@ -212,6 +222,7 @@ defmodule Teiserver.Account.UserLib do
   def update_password(%User{} = user, attrs) do
     User.changeset(user, attrs, :change_password)
     |> Teiserver.Repo.update()
+    |> maybe_decache_user()
   end
 
   @doc """
@@ -230,6 +241,7 @@ defmodule Teiserver.Account.UserLib do
   def update_limited_user(%User{} = user, attrs) do
     User.changeset(user, attrs, :user_form)
     |> Teiserver.Repo.update()
+    |> maybe_decache_user()
   end
 
   @doc """
@@ -247,6 +259,7 @@ defmodule Teiserver.Account.UserLib do
   @spec delete_user(User.t()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
   def delete_user(%User{} = user) do
     Teiserver.Repo.delete(user)
+    |> maybe_decache_user()
   end
 
   @doc """
