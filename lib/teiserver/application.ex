@@ -8,6 +8,7 @@ defmodule Teiserver.Application do
     children = [
       {Phoenix.PubSub, name: Teiserver.PubSub},
       Teiserver.System.ClusterManagerSupervisor,
+      Teiserver.System.CacheClusterServer,
 
       # Servers not part of the general slew of things
       {Registry, [keys: :unique, members: :auto, name: Teiserver.ServerRegistry]},
@@ -37,7 +38,10 @@ defmodule Teiserver.Application do
       # {Registry, [keys: :unique, members: :auto, name: Teiserver.LocalMMMatchRegistry]}
 
       # DB Lookup caches
-      add_cache(:ts_user_by_user_id_cache, [ttl: :timer.seconds(1)]),
+      add_cache(:ts_server_setting_cache, [ttl: :timer.minutes(1)]),
+      add_cache(:ts_user_setting_cache, [ttl: :timer.minutes(1)]),
+
+      add_cache(:ts_user_by_user_id_cache, [ttl: :timer.minutes(5)]),
 
       # Telemetry caches
       add_cache(:ts_property_types_cache),

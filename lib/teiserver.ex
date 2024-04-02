@@ -89,4 +89,9 @@ defmodule Teiserver do
   @doc false
   @spec unsubscribe(String.t()) :: :ok
   defdelegate unsubscribe(topic), to: PubSubHelper
+
+  # Cluster cache delegation
+  @spec invalidate_cache(atom, any) :: :ok
+  defdelegate invalidate_cache(table, key_or_keys), to: Teiserver.System.CacheClusterServer
+
 end
