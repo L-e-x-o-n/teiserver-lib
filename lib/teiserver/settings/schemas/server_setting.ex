@@ -1,12 +1,14 @@
 defmodule Teiserver.Settings.ServerSetting do
   @moduledoc """
   # Site setting
-  A key/value storage of settings used as part of the server.
+  A key/value storage of settings used as part of the server. While backed by the database they are cached and thus should be quick to access. ServerSettings can be changed at any stage.
+
+  Each setting key exists only once and affects the entire Teiserver cluster.
 
   ### Attributes
 
-  * `:key` - The key of the setting
-  * `:email` - The value of the setting
+  * `:key` - The key of the setting, refers to a `Teiserver.Settings.UserSettingType`
+  * `:value` - The value of the setting, while stored as a string it will be converted based on the setting type
   """
   use TeiserverMacros, :schema
 

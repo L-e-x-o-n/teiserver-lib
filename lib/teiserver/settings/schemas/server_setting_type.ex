@@ -1,7 +1,7 @@
 defmodule Teiserver.Settings.ServerSettingType do
   @moduledoc """
   # ServerSettingType
-  A server setting type is a structure for server settings to reference. The setting types are created at node startup.
+  A server setting type is a structure for server settings to reference. The setting types are created at node startup and though the values can be changed at runtime the types are not intended to be changed at runtime.
 
   ### Attributes
 
@@ -33,11 +33,4 @@ defmodule Teiserver.Settings.ServerSettingType do
     field(:default, String.t() | Integer.t() | boolean | nil, default: nil)
     field(:description, String.t() | nil, default: nil)
   end
-
-  # @spec new(opts) :: __MODULE__.t()
-  # def new(opts) do
-  #   %__MODULE__{
-  #     key: opts[:key],
-  #   }
-  # end
 end

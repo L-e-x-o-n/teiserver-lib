@@ -1,13 +1,15 @@
 defmodule Teiserver.Settings.UserSetting do
   @moduledoc """
   # User setting
-  A key/value storage of settings tied to users
+  A key/value storage of settings tied to users. They are backed by the database but cached so can be accessed easily. Each user has their own settings with types defined by `Teiserver.Settings.UserSettingType`.
+
+  The intended use case for User settings is anything where you want to store a key-value store against the user.
 
   ### Attributes
 
   * `:user_id` - A reference to the User in question
-  * `:key` - The key of the setting
-  * `:email` - The value of the setting
+  * `:key` - The key of the setting linking it to a `Teiserver.Settings.UserSettingType`
+  * `:value` - The value of the setting
   """
   use TeiserverMacros, :schema
 

@@ -1,6 +1,6 @@
 defmodule Teiserver.Settings.ServerSettingTypeLib do
   @moduledoc """
-  A set of functions for working with `ServerSettingType` objects.
+  A library of functions for working with `Teiserver.Settings.ServerSettingType`
   """
 
   @cache_table :ts_server_setting_type_store

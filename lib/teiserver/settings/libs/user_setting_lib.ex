@@ -1,6 +1,6 @@
 defmodule Teiserver.Settings.UserSettingLib do
   @moduledoc """
-  TODO: Library of user_setting related functions.
+  A library of functions for working with `Teiserver.Settings.UserSetting`
   """
   use TeiserverMacros, :library
   alias Teiserver.Settings.{UserSetting, UserSettingQueries, UserSettingTypeLib}

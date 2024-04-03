@@ -1,6 +1,6 @@
 defmodule Teiserver.Settings.UserSettingTypeLib do
   @moduledoc """
-  A set of functions for working with `UserSettingType` objects.
+  A library of functions for working with `Teiserver.Settings.UserSettingType`
   """
 
   @cache_table :ts_user_setting_type_store

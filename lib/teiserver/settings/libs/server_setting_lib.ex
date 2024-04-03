@@ -1,6 +1,6 @@
 defmodule Teiserver.Settings.ServerSettingLib do
   @moduledoc """
-  TODO: Library of server_setting related functions.
+  A library of functions for working with `Teiserver.Settings.ServerSetting`
   """
   use TeiserverMacros, :library
   alias Teiserver.Settings.{ServerSetting, ServerSettingQueries, ServerSettingTypeLib}
