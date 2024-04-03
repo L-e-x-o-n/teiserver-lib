@@ -253,4 +253,23 @@ defmodule Teiserver.Api do
   @doc section: :direct_message
   @spec unsubscribe_from_user_messaging(User.id() | User.t()) :: :ok
   defdelegate unsubscribe_from_user_messaging(user_or_user_id), to: DirectMessageLib
+
+  # Settings
+  alias Teiserver.Settings.{ServerSettingLib, UserSettingLib}
+
+  @doc section: :server_setting
+  @spec get_server_setting_value(String.t()) :: String.t() | integer() | boolean() | nil
+  defdelegate get_server_setting_value(key), to: ServerSettingLib
+
+  @doc section: :server_setting
+  @spec set_server_setting_value(String.t(), String.t() | non_neg_integer() | boolean() | nil) :: :ok
+  defdelegate set_server_setting_value(key, value), to: ServerSettingLib
+
+  @doc section: :user_setting
+  @spec get_user_setting_value(Teiserver.user_id(), String.t()) :: String.t() | integer() | boolean() | nil
+  defdelegate get_user_setting_value(user_id, key), to: UserSettingLib
+
+  @doc section: :user_setting
+  @spec set_user_setting_value(Teiserver.user_id(), String.t(), String.t() | non_neg_integer() | boolean() | nil) :: :ok
+  defdelegate set_user_setting_value(user_id, key, value), to: UserSettingLib
 end

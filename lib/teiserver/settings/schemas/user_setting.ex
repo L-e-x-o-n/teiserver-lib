@@ -29,6 +29,8 @@ defmodule Teiserver.Settings.UserSetting do
         }
 
   @doc false
+  @spec changeset(map()) :: Ecto.Changeset.t()
+  @spec changeset(map(), map()) :: Ecto.Changeset.t()
   def changeset(server_setting, attrs \\ %{}) do
     server_setting
     |> cast(attrs, ~w(user_id key value)a)

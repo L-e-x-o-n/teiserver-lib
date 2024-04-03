@@ -38,7 +38,9 @@ defmodule Teiserver.Application do
       # {Registry, [keys: :unique, members: :auto, name: Teiserver.LocalMMMatchRegistry]}
 
       # DB Lookup caches
+      add_cache(:ts_server_setting_type_store),
       add_cache(:ts_server_setting_cache, [ttl: :timer.minutes(1)]),
+      add_cache(:ts_user_setting_type_store),
       add_cache(:ts_user_setting_cache, [ttl: :timer.minutes(1)]),
 
       add_cache(:ts_user_by_user_id_cache, [ttl: :timer.minutes(5)]),

@@ -93,12 +93,6 @@ defmodule Teiserver.Account.UserLib do
       {:ok, value} ->
         value
     end
-
-    # Cachex.fetch(:ts_user_by_user_id_cache, user_id, fn ->
-    #   user = do_get_user_by_id(user_id)
-
-    #   {:commit, user, ttl: :timer.minutes(15)}
-    # end)
   end
 
   @spec do_get_user_by_id(Teiserver.user_id()) :: User.t() | nil

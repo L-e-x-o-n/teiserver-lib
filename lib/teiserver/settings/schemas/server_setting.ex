@@ -18,6 +18,8 @@ defmodule Teiserver.Settings.ServerSetting do
     timestamps()
   end
 
+  @type key :: String.t()
+
   @type t :: %__MODULE__{
           key: String.t(),
           value: String.t(),
@@ -26,9 +28,11 @@ defmodule Teiserver.Settings.ServerSetting do
         }
 
   @doc false
+  @spec changeset(map()) :: Ecto.Changeset.t()
+  @spec changeset(map(), map()) :: Ecto.Changeset.t()
   def changeset(server_setting, attrs \\ %{}) do
     server_setting
     |> cast(attrs, ~w(key value)a)
-    |> validate_required(~w(key value)a)
+    |> validate_required(~w(key)a)
   end
 end
