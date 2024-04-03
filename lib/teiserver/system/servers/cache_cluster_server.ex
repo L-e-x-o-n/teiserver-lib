@@ -29,7 +29,7 @@ defmodule Teiserver.System.CacheClusterServer do
   def handle_info({:cache_cluster, :delete, from_node, table, key_or_keys}, state) do
     if from_node != Node.self() do
       key_or_keys
-      |> List.wrap
+      |> List.wrap()
       |> Enum.each(fn key ->
         Cachex.del(table, key)
       end)

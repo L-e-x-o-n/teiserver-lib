@@ -28,7 +28,7 @@ defmodule Teiserver.Settings.ServerSettingType do
     field(:section, String.t())
     field(:type, String.t())
 
-    field(:permissions, String.t() | [String.t()] | nil,  default: nil)
+    field(:permissions, String.t() | [String.t()] | nil, default: nil)
     field(:choices, [String.t()] | nil, default: nil)
     field(:default, String.t() | Integer.t() | boolean | nil, default: nil)
     field(:description, String.t() | nil, default: nil)

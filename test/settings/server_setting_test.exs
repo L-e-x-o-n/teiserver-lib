@@ -111,7 +111,9 @@ defmodule Teiserver.ServerSettingTest do
 
     test "strings" do
       type = SettingsFixtures.server_setting_type_fixture(%{"type" => "string"})
-      _setting = SettingsFixtures.server_setting_fixture(%{"type" => type, "value" => "123456789"})
+
+      _setting =
+        SettingsFixtures.server_setting_fixture(%{"type" => type, "value" => "123456789"})
 
       value = Settings.get_server_setting_value(type.key)
       assert value == "123456789"
@@ -124,10 +126,12 @@ defmodule Teiserver.ServerSettingTest do
 
     test "integers" do
       type = SettingsFixtures.server_setting_type_fixture(%{"type" => "integer"})
-      _setting = SettingsFixtures.server_setting_fixture(%{"type" => type, "value" => "123456789"})
+
+      _setting =
+        SettingsFixtures.server_setting_fixture(%{"type" => type, "value" => "123456789"})
 
       value = Settings.get_server_setting_value(type.key)
-      assert value == 123456789
+      assert value == 123_456_789
 
       Settings.set_server_setting_value(type.key, 123)
 

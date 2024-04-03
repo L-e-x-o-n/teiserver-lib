@@ -86,6 +86,7 @@ defmodule Teiserver.Connections.ClientServer do
   # and thus we don't want to keep the client alive
   def handle_cast({:purposeful_disconnect, pid}, state) do
     new_state = lose_connection(pid, state)
+
     if new_state.client.connected? do
       {:noreply, new_state}
     else
@@ -180,16 +181,17 @@ defmodule Teiserver.Connections.ClientServer do
         )
       end
 
-      new_state = cond do
-        state.client.lobby_id == nil && new_client.lobby_id != nil ->
-          added_to_lobby(new_client.lobby_id, state)
+      new_state =
+        cond do
+          state.client.lobby_id == nil && new_client.lobby_id != nil ->
+            added_to_lobby(new_client.lobby_id, state)
 
-        state.client.lobby_id != nil && new_client.lobby_id == nil ->
-          removed_from_lobby(state.client.lobby_id, state)
+          state.client.lobby_id != nil && new_client.lobby_id == nil ->
+            removed_from_lobby(state.client.lobby_id, state)
 
-        true ->
-          state
-      end
+          true ->
+            state
+        end
 
       %{new_state | client: new_client}
     end

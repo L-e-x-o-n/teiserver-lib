@@ -31,12 +31,13 @@ defmodule Teiserver.UserSettingTypeTest do
       end)
 
       # Do it correctly so we can test for duplicate key error
-      {:ok, _} = Settings.add_user_setting_type(%{
-        key: "#{__MODULE__} create errors",
-        label: "label here",
-        section: "test",
-        type: "string"
-      })
+      {:ok, _} =
+        Settings.add_user_setting_type(%{
+          key: "#{__MODULE__} create errors",
+          label: "label here",
+          section: "test",
+          type: "string"
+        })
 
       assert_raise(RuntimeError, fn ->
         Settings.add_user_setting_type(%{
@@ -53,12 +54,13 @@ defmodule Teiserver.UserSettingTypeTest do
 
       assert Settings.get_user_setting_type(key) == nil
 
-      {result, type} = Settings.add_user_setting_type(%{
-        key: key,
-        label: "label here",
-        section: "test",
-        type: "string"
-      })
+      {result, type} =
+        Settings.add_user_setting_type(%{
+          key: key,
+          label: "label here",
+          section: "test",
+          type: "string"
+        })
 
       assert result == :ok
       assert type.key == key

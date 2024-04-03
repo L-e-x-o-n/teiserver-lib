@@ -62,7 +62,7 @@ defmodule Teiserver.Settings.ServerSettingLib do
   def get_server_setting(key, query_args \\ []) do
     (query_args ++ [key: key])
     |> ServerSettingQueries.server_setting_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -79,28 +79,31 @@ defmodule Teiserver.Settings.ServerSettingLib do
       nil
 
   """
-  @spec get_server_setting_value(ServerSetting.key()) :: String.t() | non_neg_integer() | boolean() | nil
+  @spec get_server_setting_value(ServerSetting.key()) ::
+          String.t() | non_neg_integer() | boolean() | nil
   def get_server_setting_value(key) do
     case Cachex.get(:ts_server_setting_cache, key) do
       {:ok, nil} ->
-        setting = get_server_setting(key, [limit: 1])
+        setting = get_server_setting(key, limit: 1)
         type = ServerSettingTypeLib.get_server_setting_type(key)
 
-        value = case setting do
-          nil ->
-            type.default
+        value =
+          case setting do
+            nil ->
+              type.default
 
-          %{value: nil} ->
-            type.default
+            %{value: nil} ->
+              type.default
 
-          %{value: v} ->
-            v
-        end
+            %{value: v} ->
+              v
+          end
 
         value = convert_from_raw_value(value, type.type)
 
         Cachex.put(:ts_server_setting_cache, key, value)
         value
+
       {:ok, value} ->
         value
     end
@@ -112,17 +115,20 @@ defmodule Teiserver.Settings.ServerSettingLib do
   defp convert_from_raw_value(raw_value, "boolean"), do: raw_value == "t"
   defp convert_from_raw_value(_, _), do: nil
 
-  @spec set_server_setting_value(String.t(), String.t() | non_neg_integer() | boolean() | nil) :: :ok
+  @spec set_server_setting_value(String.t(), String.t() | non_neg_integer() | boolean() | nil) ::
+          :ok
   def set_server_setting_value(key, value) do
     type = ServerSettingTypeLib.get_server_setting_type(key)
     raw_value = convert_to_raw_value(value, type.type)
 
     case get_server_setting(key) do
       nil ->
-        {:ok, _} = create_server_setting(%{
-          key: key,
-          value: raw_value
-        })
+        {:ok, _} =
+          create_server_setting(%{
+            key: key,
+            value: raw_value
+          })
+
         :ok
 
       server_setting ->
@@ -135,7 +141,7 @@ defmodule Teiserver.Settings.ServerSettingLib do
   @spec convert_to_raw_value(String.t(), String.t()) :: String.t() | integer() | boolean() | nil
   defp convert_to_raw_value(value, "string"), do: value
   defp convert_to_raw_value(value, "integer"), do: to_string(value)
-  defp convert_to_raw_value(value, "boolean"), do: (if value, do: "t", else: "f")
+  defp convert_to_raw_value(value, "boolean"), do: if(value, do: "t", else: "f")
   defp convert_to_raw_value(_, _), do: nil
 
   @doc """
@@ -150,7 +156,7 @@ defmodule Teiserver.Settings.ServerSettingLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_server_setting(map) :: {:ok, ServerSetting.t} | {:error, Ecto.Changeset.t}
+  @spec create_server_setting(map) :: {:ok, ServerSetting.t()} | {:error, Ecto.Changeset.t()}
   def create_server_setting(attrs) do
     %ServerSetting{}
     |> ServerSetting.changeset(attrs)
@@ -169,7 +175,8 @@ defmodule Teiserver.Settings.ServerSettingLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_server_setting(ServerSetting.t, map) :: {:ok, ServerSetting.t} | {:error, Ecto.Changeset.t}
+  @spec update_server_setting(ServerSetting.t(), map) ::
+          {:ok, ServerSetting.t()} | {:error, Ecto.Changeset.t()}
   def update_server_setting(%ServerSetting{} = server_setting, attrs) do
     server_setting
     |> ServerSetting.changeset(attrs)
@@ -188,7 +195,8 @@ defmodule Teiserver.Settings.ServerSettingLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_server_setting(ServerSetting.t) :: {:ok, ServerSetting.t} | {:error, Ecto.Changeset.t}
+  @spec delete_server_setting(ServerSetting.t()) ::
+          {:ok, ServerSetting.t()} | {:error, Ecto.Changeset.t()}
   def delete_server_setting(%ServerSetting{} = server_setting) do
     Repo.delete(server_setting)
   end
@@ -202,7 +210,7 @@ defmodule Teiserver.Settings.ServerSettingLib do
       %Ecto.Changeset{data: %ServerSetting{}}
 
   """
-  @spec change_server_setting(ServerSetting.t, map) :: Ecto.Changeset.t
+  @spec change_server_setting(ServerSetting.t(), map) :: Ecto.Changeset.t()
   def change_server_setting(%ServerSetting{} = server_setting, attrs \\ %{}) do
     ServerSetting.changeset(server_setting, attrs)
   end

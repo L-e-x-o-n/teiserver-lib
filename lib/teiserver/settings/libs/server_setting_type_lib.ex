@@ -16,7 +16,7 @@ defmodule Teiserver.Settings.ServerSettingTypeLib do
   @spec list_server_setting_type_keys() :: [String.t()]
   def list_server_setting_type_keys() do
     {:ok, v} = Cachex.get(@cache_table, "_all")
-    (v || [])
+    v || []
   end
 
   @spec get_server_setting_type(String.t()) :: ServerSettingType.t() | nil
@@ -32,6 +32,7 @@ defmodule Teiserver.Settings.ServerSettingTypeLib do
     end
 
     existing_keys = list_server_setting_type_keys()
+
     if Enum.member?(existing_keys, args.key) do
       raise "Key #{args.key} already exists"
     end
@@ -41,7 +42,6 @@ defmodule Teiserver.Settings.ServerSettingTypeLib do
       label: args.label,
       section: args.section,
       type: args.type,
-
       permissions: Map.get(args, :permissions),
       choices: Map.get(args, :choices),
       default: Map.get(args, :default),

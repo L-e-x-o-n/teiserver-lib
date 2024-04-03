@@ -177,9 +177,9 @@ defmodule Teiserver.Api do
   defdelegate can_add_client_to_lobby(user_id, lobby_id), to: LobbyLib
 
   @doc section: :lobby
-  @spec can_add_client_to_lobby(Teiserver.user_id(), Lobby.id(), String.t()) :: {boolean(), String.t() | nil}
+  @spec can_add_client_to_lobby(Teiserver.user_id(), Lobby.id(), String.t()) ::
+          {boolean(), String.t() | nil}
   defdelegate can_add_client_to_lobby(user_id, lobby_id, password), to: LobbyLib
-
 
   @doc section: :lobby
   @spec add_client_to_lobby(Teiserver.user_id(), Lobby.id()) :: :ok | {:error, String.t()}
@@ -262,14 +262,26 @@ defmodule Teiserver.Api do
   defdelegate get_server_setting_value(key), to: ServerSettingLib
 
   @doc section: :server_setting
-  @spec set_server_setting_value(String.t(), String.t() | non_neg_integer() | boolean() | nil) :: :ok
+  @spec set_server_setting_value(String.t(), String.t() | non_neg_integer() | boolean() | nil) ::
+          :ok
   defdelegate set_server_setting_value(key, value), to: ServerSettingLib
 
   @doc section: :user_setting
-  @spec get_user_setting_value(Teiserver.user_id(), String.t()) :: String.t() | integer() | boolean() | nil
+  @spec get_user_setting_value(Teiserver.user_id(), String.t()) ::
+          String.t() | integer() | boolean() | nil
   defdelegate get_user_setting_value(user_id, key), to: UserSettingLib
 
   @doc section: :user_setting
-  @spec set_user_setting_value(Teiserver.user_id(), String.t(), String.t() | non_neg_integer() | boolean() | nil) :: :ok
+  @spec set_user_setting_value(
+          Teiserver.user_id(),
+          String.t(),
+          String.t() | non_neg_integer() | boolean() | nil
+        ) :: :ok
   defdelegate set_user_setting_value(user_id, key, value), to: UserSettingLib
+
+  # Logging
+  alias Teiserver.Logging.AuditLogLib
+
+  @spec create_audit_log(Teiserver.user_id(), String.t(), String.t(), map()) :: {:ok, AuditLog.t} | {:error, Ecto.Changeset.t}
+  defdelegate create_audit_log(user_id, ip, action, details), to: AuditLogLib
 end

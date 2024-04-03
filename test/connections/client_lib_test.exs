@@ -79,6 +79,7 @@ defmodule Connections.ClientLibTest do
       assert client.team_number == nil
       assert update_msg.reason == "test2"
     end
+
     test "get_client_list" do
       {_conn1, user1} = ConnectionFixtures.client_fixture()
       {_conn1, user2} = ConnectionFixtures.client_fixture()

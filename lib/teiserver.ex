@@ -74,7 +74,7 @@ defmodule Teiserver do
 
   @spec deterministic_uuid(String.t()) :: String.t()
   def deterministic_uuid(base) do
-    UUID.uuid5(:nil, base)
+    UUID.uuid5(nil, base)
   end
 
   # PubSub delegation
@@ -93,5 +93,4 @@ defmodule Teiserver do
   # Cluster cache delegation
   @spec invalidate_cache(atom, any) :: :ok
   defdelegate invalidate_cache(table, key_or_keys), to: Teiserver.System.CacheClusterServer
-
 end

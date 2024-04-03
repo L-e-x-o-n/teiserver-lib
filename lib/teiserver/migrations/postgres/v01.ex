@@ -183,10 +183,35 @@ defmodule Teiserver.Migrations.Postgres.V01 do
       timestamps()
     end
 
-    create(index(:settings_user_settings, [:user_id], prefix: prefix))
+    create_if_not_exists(index(:settings_user_settings, [:user_id], prefix: prefix))
+
+    # Logging
+    create_if_not_exists table(:audit_logs, prefix: prefix) do
+      add(:action, :string)
+      add(:details, :jsonb)
+      add(:ip, :string)
+      add(:user_id, references(:account_users, on_delete: :nothing, type: :uuid), type: :uuid)
+
+      timestamps()
+    end
+
+    # Telemetry tables
+    create_if_not_exists table(:telemetry_event_types, prefix: prefix) do
+      add(:category, :string)
+      add(:name, :string)
+    end
+
+    create_if_not_exists(unique_index(:telemetry_event_types, [:category, :name], prefix: prefix))
   end
 
+  @spec down(map) :: any
   def down(%{prefix: prefix, quoted_prefix: _quoted}) do
+    # Telemetry
+    drop_if_exists(table(:telemetry_event_types, prefix: prefix))
+
+    # Logging
+    drop_if_exists(table(:audit_logs, prefix: prefix))
+
     # Comms
     drop_if_exists(table(:communication_room_messages, prefix: prefix))
     drop_if_exists(table(:communication_rooms, prefix: prefix))

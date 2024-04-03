@@ -257,7 +257,10 @@ defmodule Teiserver.Account.User do
     min_length = Application.get_env(:teiserver, :default_min_user_password_length, 6)
 
     changeset
-    |> validate_length(:password, min: min_length, message: "Passwords must be at least #{min_length} characters long")
+    |> validate_length(:password,
+      min: min_length,
+      message: "Passwords must be at least #{min_length} characters long"
+    )
   end
 
   @doc """

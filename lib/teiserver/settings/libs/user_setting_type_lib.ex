@@ -16,7 +16,7 @@ defmodule Teiserver.Settings.UserSettingTypeLib do
   @spec list_user_setting_type_keys() :: [String.t()]
   def list_user_setting_type_keys() do
     {:ok, v} = Cachex.get(@cache_table, "_all")
-    (v || [])
+    v || []
   end
 
   @spec get_user_setting_type(String.t()) :: UserSettingType.t() | nil
@@ -32,6 +32,7 @@ defmodule Teiserver.Settings.UserSettingTypeLib do
     end
 
     existing_keys = list_user_setting_type_keys()
+
     if Enum.member?(existing_keys, args.key) do
       raise "Key #{args.key} already exists"
     end
@@ -41,7 +42,6 @@ defmodule Teiserver.Settings.UserSettingTypeLib do
       label: args.label,
       section: args.section,
       type: args.type,
-
       permissions: Map.get(args, :permissions),
       choices: Map.get(args, :choices),
       default: Map.get(args, :default),

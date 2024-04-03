@@ -90,6 +90,7 @@ defmodule Teiserver.Account.UserLib do
         user = do_get_user_by_id(user_id)
         Cachex.put(:ts_user_by_user_id_cache, user_id, user)
         user
+
       {:ok, value} ->
         value
     end
@@ -98,7 +99,7 @@ defmodule Teiserver.Account.UserLib do
   @spec do_get_user_by_id(Teiserver.user_id()) :: User.t() | nil
   defp do_get_user_by_id(user_id) do
     UserQueries.user_query(id: user_id, limit: 1)
-      |> Teiserver.Repo.one()
+    |> Teiserver.Repo.one()
   end
 
   @doc """

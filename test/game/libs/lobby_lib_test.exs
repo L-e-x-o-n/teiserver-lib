@@ -56,7 +56,9 @@ defmodule Teiserver.Game.LobbyLibTest do
       assert Enum.member?(lobby_list_ids, lobby3_id)
 
       # Now just two of them
-      lobby_list = Game.stream_lobby_summaries(%{"ids" => [lobby1_id, lobby2_id]}) |> Enum.to_list()
+      lobby_list =
+        Game.stream_lobby_summaries(%{"ids" => [lobby1_id, lobby2_id]}) |> Enum.to_list()
+
       assert Enum.count(lobby_list) == 2
       lobby_list_ids = Enum.map(lobby_list, fn l -> l.id end)
 

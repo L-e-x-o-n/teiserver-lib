@@ -35,7 +35,7 @@ defmodule Teiserver.Settings.UserSettingLib do
       ** (Ecto.NoResultsError)
 
   """
-  @spec get_user_setting!(Teiserver.user_id(), UserSetting.key()) :: UserSetting.t
+  @spec get_user_setting!(Teiserver.user_id(), UserSetting.key()) :: UserSetting.t()
   def get_user_setting!(user_id, key) do
     UserSettingQueries.user_setting_query(where: [key: key, user_id: user_id], limit: 1)
     |> Repo.one!()
@@ -55,10 +55,10 @@ defmodule Teiserver.Settings.UserSettingLib do
       nil
 
   """
-  @spec get_user_setting(Teiserver.user_id(), UserSetting.key()) :: UserSetting.t | nil
+  @spec get_user_setting(Teiserver.user_id(), UserSetting.key()) :: UserSetting.t() | nil
   def get_user_setting(user_id, key) do
     UserSettingQueries.user_setting_query(where: [key: key, user_id: user_id], limit: 1)
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -75,7 +75,8 @@ defmodule Teiserver.Settings.UserSettingLib do
       nil
 
   """
-  @spec get_user_setting_value(Teiserver.user_id(), String.t()) :: String.t() | integer() | boolean() | nil
+  @spec get_user_setting_value(Teiserver.user_id(), String.t()) ::
+          String.t() | integer() | boolean() | nil
   def get_user_setting_value(user_id, key) do
     lookup = cache_key(user_id, key)
 
@@ -84,21 +85,23 @@ defmodule Teiserver.Settings.UserSettingLib do
         setting = get_user_setting(user_id, key)
         type = UserSettingTypeLib.get_user_setting_type(key)
 
-        value = case setting do
-          nil ->
-            type.default
+        value =
+          case setting do
+            nil ->
+              type.default
 
-          %{value: nil} ->
-            type.default
+            %{value: nil} ->
+              type.default
 
-          %{value: v} ->
-            v
-        end
+            %{value: v} ->
+              v
+          end
 
         value = convert_from_raw_value(value, type.type)
 
         Cachex.put(:ts_user_setting_cache, lookup, value)
         value
+
       {:ok, value} ->
         value
     end
@@ -110,7 +113,11 @@ defmodule Teiserver.Settings.UserSettingLib do
   defp convert_from_raw_value(raw_value, "boolean"), do: raw_value == "t"
   defp convert_from_raw_value(_, _), do: nil
 
-  @spec set_user_setting_value(Teiserver.user_id(), String.t(), String.t() | non_neg_integer() | boolean() | nil) :: :ok
+  @spec set_user_setting_value(
+          Teiserver.user_id(),
+          String.t(),
+          String.t() | non_neg_integer() | boolean() | nil
+        ) :: :ok
   def set_user_setting_value(user_id, key, value) do
     lookup = cache_key(user_id, key)
 
@@ -119,11 +126,13 @@ defmodule Teiserver.Settings.UserSettingLib do
 
     case get_user_setting(user_id, key) do
       nil ->
-        {:ok, _} = create_user_setting(%{
-          user_id: user_id,
-          key: key,
-          value: raw_value
-        })
+        {:ok, _} =
+          create_user_setting(%{
+            user_id: user_id,
+            key: key,
+            value: raw_value
+          })
+
         :ok
 
       user_setting ->
@@ -136,7 +145,7 @@ defmodule Teiserver.Settings.UserSettingLib do
   @spec convert_to_raw_value(String.t(), String.t()) :: String.t() | integer() | boolean() | nil
   defp convert_to_raw_value(value, "string"), do: value
   defp convert_to_raw_value(value, "integer"), do: to_string(value)
-  defp convert_to_raw_value(value, "boolean"), do: (if value, do: "t", else: "f")
+  defp convert_to_raw_value(value, "boolean"), do: if(value, do: "t", else: "f")
   defp convert_to_raw_value(_, _), do: nil
 
   @doc """
@@ -151,7 +160,7 @@ defmodule Teiserver.Settings.UserSettingLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_user_setting(map) :: {:ok, UserSetting.t} | {:error, Ecto.Changeset.t}
+  @spec create_user_setting(map) :: {:ok, UserSetting.t()} | {:error, Ecto.Changeset.t()}
   def create_user_setting(attrs) do
     %UserSetting{}
     |> UserSetting.changeset(attrs)
@@ -170,7 +179,8 @@ defmodule Teiserver.Settings.UserSettingLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_user_setting(UserSetting.t, map) :: {:ok, UserSetting.t} | {:error, Ecto.Changeset.t}
+  @spec update_user_setting(UserSetting.t(), map) ::
+          {:ok, UserSetting.t()} | {:error, Ecto.Changeset.t()}
   def update_user_setting(%UserSetting{} = user_setting, attrs) do
     user_setting
     |> UserSetting.changeset(attrs)
@@ -189,7 +199,8 @@ defmodule Teiserver.Settings.UserSettingLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_user_setting(UserSetting.t) :: {:ok, UserSetting.t} | {:error, Ecto.Changeset.t}
+  @spec delete_user_setting(UserSetting.t()) ::
+          {:ok, UserSetting.t()} | {:error, Ecto.Changeset.t()}
   def delete_user_setting(%UserSetting{} = user_setting) do
     Repo.delete(user_setting)
   end
@@ -203,7 +214,7 @@ defmodule Teiserver.Settings.UserSettingLib do
       %Ecto.Changeset{data: %UserSetting{}}
 
   """
-  @spec change_user_setting(UserSetting.t, map) :: Ecto.Changeset.t
+  @spec change_user_setting(UserSetting.t(), map) :: Ecto.Changeset.t()
   def change_user_setting(%UserSetting{} = user_setting, attrs \\ %{}) do
     UserSetting.changeset(user_setting, attrs)
   end

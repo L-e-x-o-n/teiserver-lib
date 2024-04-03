@@ -103,6 +103,7 @@ defmodule Teiserver.Game.LobbyLib do
 
   @spec include_lobby?(LobbySummary.t(), map()) :: boolean
   defp include_lobby?(nil, _), do: false
+
   defp include_lobby?(lobby, filters) do
     [
       test_match_ongoing?(filters["match_ongoing?"], lobby),
@@ -119,7 +120,7 @@ defmodule Teiserver.Game.LobbyLib do
       test_min_player_count(filters["min_player_count"], lobby),
       test_max_player_count(filters["max_player_count"], lobby)
     ]
-    |> Enum.all?
+    |> Enum.all?()
   end
 
   @spec test_match_ongoing?(nil | boolean, LobbySummary.t()) :: boolean
@@ -127,6 +128,7 @@ defmodule Teiserver.Game.LobbyLib do
   defp test_match_ongoing?(value, lobby), do: lobby.match_ongoing? == value
 
   defp test_require_any_tags(nil, _), do: true
+
   defp test_require_any_tags(tags, lobby) do
     tags
     |> Enum.any?(fn tag ->
@@ -135,6 +137,7 @@ defmodule Teiserver.Game.LobbyLib do
   end
 
   defp test_require_all_tags(nil, _), do: true
+
   defp test_require_all_tags(tags, lobby) do
     tags
     |> Enum.all?(fn tag ->
@@ -143,6 +146,7 @@ defmodule Teiserver.Game.LobbyLib do
   end
 
   defp test_exclude_tags(nil, _), do: true
+
   defp test_exclude_tags(tags, lobby) do
     tags
     |> Enum.all?(fn tag ->
@@ -178,7 +182,6 @@ defmodule Teiserver.Game.LobbyLib do
 
   defp test_max_player_count(nil, _), do: true
   defp test_max_player_count(value, lobby), do: lobby.player_count <= value
-
 
   @doc """
   Given a user_id of the host and the initial lobby name, starts a process
@@ -218,7 +221,12 @@ defmodule Teiserver.Game.LobbyLib do
       true ->
         with {:ok, lobby} <- start_lobby_server(host_id, name),
              :ok <- cycle_lobby(lobby.id),
-             _ <- ClientLib.update_client(host_id, %{lobby_id: lobby.id, lobby_host?: true}, "opened lobby") do
+             _ <-
+               ClientLib.update_client(
+                 host_id,
+                 %{lobby_id: lobby.id, lobby_host?: true},
+                 "opened lobby"
+               ) do
           {:ok, lobby.id}
         else
           :failure1 -> :fail_result1
@@ -316,7 +324,8 @@ defmodule Teiserver.Game.LobbyLib do
   Adds a client to the lobby
   """
   @spec can_add_client_to_lobby(Teiserver.user_id(), Lobby.id()) :: {boolean(), String.t() | nil}
-  @spec can_add_client_to_lobby(Teiserver.user_id(), Lobby.id(), String.t()) :: {boolean(), String.t() | nil}
+  @spec can_add_client_to_lobby(Teiserver.user_id(), Lobby.id(), String.t()) ::
+          {boolean(), String.t() | nil}
   def can_add_client_to_lobby(user_id, lobby_id, password \\ nil) do
     case call_lobby(lobby_id, {:can_add_client, user_id, password}) do
       nil ->

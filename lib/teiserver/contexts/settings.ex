@@ -34,34 +34,36 @@ defmodule Teiserver.Settings do
   defdelegate server_setting_query(args), to: ServerSettingQueries
 
   @doc section: :server_setting
-  @spec list_server_settings(Teiserver.query_args()) :: [ServerSetting.t]
+  @spec list_server_settings(Teiserver.query_args()) :: [ServerSetting.t()]
   defdelegate list_server_settings(args), to: ServerSettingLib
 
   @doc section: :server_setting
-  @spec get_server_setting!(ServerSetting.key()) :: ServerSetting.t
-  @spec get_server_setting!(ServerSetting.key(), Teiserver.query_args()) :: ServerSetting.t
+  @spec get_server_setting!(ServerSetting.key()) :: ServerSetting.t()
+  @spec get_server_setting!(ServerSetting.key(), Teiserver.query_args()) :: ServerSetting.t()
   defdelegate get_server_setting!(server_setting_id, query_args \\ []), to: ServerSettingLib
 
   @doc section: :server_setting
-  @spec get_server_setting(ServerSetting.key()) :: ServerSetting.t | nil
-  @spec get_server_setting(ServerSetting.key(), Teiserver.query_args()) :: ServerSetting.t | nil
+  @spec get_server_setting(ServerSetting.key()) :: ServerSetting.t() | nil
+  @spec get_server_setting(ServerSetting.key(), Teiserver.query_args()) :: ServerSetting.t() | nil
   defdelegate get_server_setting(server_setting_id, query_args \\ []), to: ServerSettingLib
 
   @doc section: :server_setting
-  @spec create_server_setting(map) :: {:ok, ServerSetting.t} | {:error, Ecto.Changeset.t()}
+  @spec create_server_setting(map) :: {:ok, ServerSetting.t()} | {:error, Ecto.Changeset.t()}
   defdelegate create_server_setting(attrs), to: ServerSettingLib
 
   @doc section: :server_setting
-  @spec update_server_setting(ServerSetting, map) :: {:ok, ServerSetting.t} | {:error, Ecto.Changeset.t()}
+  @spec update_server_setting(ServerSetting, map) ::
+          {:ok, ServerSetting.t()} | {:error, Ecto.Changeset.t()}
   defdelegate update_server_setting(server_setting, attrs), to: ServerSettingLib
 
   @doc section: :server_setting
-  @spec delete_server_setting(ServerSetting.t) :: {:ok, ServerSetting.t} | {:error, Ecto.Changeset.t()}
+  @spec delete_server_setting(ServerSetting.t()) ::
+          {:ok, ServerSetting.t()} | {:error, Ecto.Changeset.t()}
   defdelegate delete_server_setting(server_setting), to: ServerSettingLib
 
   @doc section: :server_setting
-  @spec change_server_setting(ServerSetting.t) :: Ecto.Changeset.t()
-  @spec change_server_setting(ServerSetting.t, map) :: Ecto.Changeset.t()
+  @spec change_server_setting(ServerSetting.t()) :: Ecto.Changeset.t()
+  @spec change_server_setting(ServerSetting.t(), map) :: Ecto.Changeset.t()
   defdelegate change_server_setting(server_setting, attrs \\ %{}), to: ServerSettingLib
 
   @doc section: :server_setting
@@ -69,7 +71,8 @@ defmodule Teiserver.Settings do
   defdelegate get_server_setting_value(key), to: ServerSettingLib
 
   @doc section: :server_setting
-  @spec set_server_setting_value(String.t(), String.t() | non_neg_integer() | boolean() | nil) :: :ok
+  @spec set_server_setting_value(String.t(), String.t() | non_neg_integer() | boolean() | nil) ::
+          :ok
   defdelegate set_server_setting_value(key, value), to: ServerSettingLib
 
   # UserSettingType
@@ -91,8 +94,6 @@ defmodule Teiserver.Settings do
   @spec add_user_setting_type(map()) :: {:ok, UserSettingType.t()} | {:error, String.t()}
   defdelegate add_user_setting_type(args), to: UserSettingTypeLib
 
-
-
   # UserSettings
   alias Teiserver.Settings.{UserSetting, UserSettingLib, UserSettingQueries}
 
@@ -101,39 +102,46 @@ defmodule Teiserver.Settings do
   defdelegate user_setting_query(args), to: UserSettingQueries
 
   @doc section: :user_setting
-  @spec list_user_settings(Teiserver.query_args()) :: [UserSetting.t]
+  @spec list_user_settings(Teiserver.query_args()) :: [UserSetting.t()]
   defdelegate list_user_settings(args), to: UserSettingLib
 
   @doc section: :user_setting
-  @spec get_user_setting!(Teiserver.user_id(), UserSetting.key()) :: UserSetting.t
+  @spec get_user_setting!(Teiserver.user_id(), UserSetting.key()) :: UserSetting.t()
   defdelegate get_user_setting!(user_id, key), to: UserSettingLib
 
   @doc section: :user_setting
-  @spec get_user_setting(Teiserver.user_id(), UserSetting.key()) :: UserSetting.t | nil
+  @spec get_user_setting(Teiserver.user_id(), UserSetting.key()) :: UserSetting.t() | nil
   defdelegate get_user_setting(user_id, key), to: UserSettingLib
 
   @doc section: :user_setting
-  @spec create_user_setting(map) :: {:ok, UserSetting.t} | {:error, Ecto.Changeset.t()}
+  @spec create_user_setting(map) :: {:ok, UserSetting.t()} | {:error, Ecto.Changeset.t()}
   defdelegate create_user_setting(attrs), to: UserSettingLib
 
   @doc section: :user_setting
-  @spec update_user_setting(UserSetting.t, map) :: {:ok, UserSetting.t} | {:error, Ecto.Changeset.t()}
+  @spec update_user_setting(UserSetting.t(), map) ::
+          {:ok, UserSetting.t()} | {:error, Ecto.Changeset.t()}
   defdelegate update_user_setting(user_setting, attrs), to: UserSettingLib
 
   @doc section: :user_setting
-  @spec delete_user_setting(UserSetting.t) :: {:ok, UserSetting.t} | {:error, Ecto.Changeset.t()}
+  @spec delete_user_setting(UserSetting.t()) ::
+          {:ok, UserSetting.t()} | {:error, Ecto.Changeset.t()}
   defdelegate delete_user_setting(user_setting), to: UserSettingLib
 
   @doc section: :user_setting
-  @spec change_user_setting(UserSetting.t) :: Ecto.Changeset.t()
-  @spec change_user_setting(UserSetting.t, map) :: Ecto.Changeset.t()
+  @spec change_user_setting(UserSetting.t()) :: Ecto.Changeset.t()
+  @spec change_user_setting(UserSetting.t(), map) :: Ecto.Changeset.t()
   defdelegate change_user_setting(user_setting, attrs \\ %{}), to: UserSettingLib
 
   @doc section: :user_setting
-  @spec get_user_setting_value(Teiserver.user_id(), String.t()) :: String.t() | integer() | boolean() | nil
+  @spec get_user_setting_value(Teiserver.user_id(), String.t()) ::
+          String.t() | integer() | boolean() | nil
   defdelegate get_user_setting_value(user_id, key), to: UserSettingLib
 
   @doc section: :user_setting
-  @spec set_user_setting_value(Teiserver.user_id(), String.t(), String.t() | non_neg_integer() | boolean() | nil) :: :ok
+  @spec set_user_setting_value(
+          Teiserver.user_id(),
+          String.t(),
+          String.t() | non_neg_integer() | boolean() | nil
+        ) :: :ok
   defdelegate set_user_setting_value(user_id, key, value), to: UserSettingLib
 end

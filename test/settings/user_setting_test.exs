@@ -116,7 +116,13 @@ defmodule Teiserver.UserSettingTest do
     test "strings" do
       user_id = AccountFixtures.user_fixture().id
       type = SettingsFixtures.user_setting_type_fixture(%{"type" => "string"})
-      _setting = SettingsFixtures.user_setting_fixture(%{"user_id" => user_id, "type" => type, "value" => "123456789"})
+
+      _setting =
+        SettingsFixtures.user_setting_fixture(%{
+          "user_id" => user_id,
+          "type" => type,
+          "value" => "123456789"
+        })
 
       value = Settings.get_user_setting_value(user_id, type.key)
       assert value == "123456789"
@@ -130,10 +136,16 @@ defmodule Teiserver.UserSettingTest do
     test "integers" do
       user_id = AccountFixtures.user_fixture().id
       type = SettingsFixtures.user_setting_type_fixture(%{"type" => "integer"})
-      _setting = SettingsFixtures.user_setting_fixture(%{"user_id" => user_id, "type" => type, "value" => "123456789"})
+
+      _setting =
+        SettingsFixtures.user_setting_fixture(%{
+          "user_id" => user_id,
+          "type" => type,
+          "value" => "123456789"
+        })
 
       value = Settings.get_user_setting_value(user_id, type.key)
-      assert value == 123456789
+      assert value == 123_456_789
 
       Settings.set_user_setting_value(user_id, type.key, 123)
 
@@ -144,7 +156,13 @@ defmodule Teiserver.UserSettingTest do
     test "booleans" do
       user_id = AccountFixtures.user_fixture().id
       type = SettingsFixtures.user_setting_type_fixture(%{"type" => "boolean"})
-      _setting = SettingsFixtures.user_setting_fixture(%{"user_id" => user_id, "type" => type, "value" => "t"})
+
+      _setting =
+        SettingsFixtures.user_setting_fixture(%{
+          "user_id" => user_id,
+          "type" => type,
+          "value" => "t"
+        })
 
       value = Settings.get_user_setting_value(user_id, type.key)
       assert value == true
