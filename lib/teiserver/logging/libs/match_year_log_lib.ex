@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.MatchYearLogLib do
   def get_match_year_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> MatchYearLogQueries.match_year_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.MatchYearLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_match_year_log(map) :: {:ok, MatchYearLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_match_year_log(map) :: {:ok, MatchYearLog.t()} | {:error, Ecto.Changeset.t()}
   def create_match_year_log(attrs) do
     %MatchYearLog{}
     |> MatchYearLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.MatchYearLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_match_year_log(MatchYearLog.t, map) :: {:ok, MatchYearLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_match_year_log(MatchYearLog.t(), map) ::
+          {:ok, MatchYearLog.t()} | {:error, Ecto.Changeset.t()}
   def update_match_year_log(%MatchYearLog{} = match_year_log, attrs) do
     match_year_log
     |> MatchYearLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.MatchYearLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_match_year_log(MatchYearLog.t) :: {:ok, MatchYearLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_match_year_log(MatchYearLog.t()) ::
+          {:ok, MatchYearLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_match_year_log(%MatchYearLog{} = match_year_log) do
     Repo.delete(match_year_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.MatchYearLogLib do
       %Ecto.Changeset{data: %MatchYearLog{}}
 
   """
-  @spec change_match_year_log(MatchYearLog.t, map) :: Ecto.Changeset.t
+  @spec change_match_year_log(MatchYearLog.t(), map) :: Ecto.Changeset.t()
   def change_match_year_log(%MatchYearLog{} = match_year_log, attrs \\ %{}) do
     MatchYearLog.changeset(match_year_log, attrs)
   end

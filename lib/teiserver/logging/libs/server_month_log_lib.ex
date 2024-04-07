@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.ServerMonthLogLib do
   def get_server_month_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> ServerMonthLogQueries.server_month_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.ServerMonthLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_server_month_log(map) :: {:ok, ServerMonthLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_server_month_log(map) :: {:ok, ServerMonthLog.t()} | {:error, Ecto.Changeset.t()}
   def create_server_month_log(attrs) do
     %ServerMonthLog{}
     |> ServerMonthLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.ServerMonthLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_server_month_log(ServerMonthLog.t, map) :: {:ok, ServerMonthLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_server_month_log(ServerMonthLog.t(), map) ::
+          {:ok, ServerMonthLog.t()} | {:error, Ecto.Changeset.t()}
   def update_server_month_log(%ServerMonthLog{} = server_month_log, attrs) do
     server_month_log
     |> ServerMonthLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.ServerMonthLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_server_month_log(ServerMonthLog.t) :: {:ok, ServerMonthLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_server_month_log(ServerMonthLog.t()) ::
+          {:ok, ServerMonthLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_server_month_log(%ServerMonthLog{} = server_month_log) do
     Repo.delete(server_month_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.ServerMonthLogLib do
       %Ecto.Changeset{data: %ServerMonthLog{}}
 
   """
-  @spec change_server_month_log(ServerMonthLog.t, map) :: Ecto.Changeset.t
+  @spec change_server_month_log(ServerMonthLog.t(), map) :: Ecto.Changeset.t()
   def change_server_month_log(%ServerMonthLog{} = server_month_log, attrs \\ %{}) do
     ServerMonthLog.changeset(server_month_log, attrs)
   end

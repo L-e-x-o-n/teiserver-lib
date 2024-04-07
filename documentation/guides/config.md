@@ -50,10 +50,10 @@ Allows you to overwrite `Teiserver.Game.MatchTypeLib.default_calculate_match_typ
 Allows you to overwrite `Teiserver.Account.User.default_calculate_user_permissions/1`. This is used to generate the list of permissions held by a user. By default it mirrors their groups.
 
 ## `fn_lobby_name_acceptor`
-A function used to determine if a lobby name is acceptable. Defaults to `Teiserver.Game.LobbyLib.default_lobby_name_acceptable/1` which always returns true.
+A function used to determine if a lobby name is acceptable. Defaults to `Teiserver.Game.LobbyLib.default_lobby_name_acceptable?/1` which always returns true.
 
 ## `fn_user_name_acceptor`
-A function used to determine if a lobby name is acceptable. Defaults to `Teiserver.Account.UserLib.default_user_name_acceptable/1` which always returns true.
+A function used to determine if a lobby name is acceptable. Defaults to `Teiserver.Account.UserLib.default_user_name_acceptable?/1` which always returns true.
 
 ## `fn_uuid_generator`
 The function used to generate UUIDs. Defaults to `&Ecto.UUID.generate/0`.

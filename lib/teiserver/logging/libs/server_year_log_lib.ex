@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.ServerYearLogLib do
   def get_server_year_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> ServerYearLogQueries.server_year_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.ServerYearLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_server_year_log(map) :: {:ok, ServerYearLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_server_year_log(map) :: {:ok, ServerYearLog.t()} | {:error, Ecto.Changeset.t()}
   def create_server_year_log(attrs) do
     %ServerYearLog{}
     |> ServerYearLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.ServerYearLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_server_year_log(ServerYearLog.t, map) :: {:ok, ServerYearLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_server_year_log(ServerYearLog.t(), map) ::
+          {:ok, ServerYearLog.t()} | {:error, Ecto.Changeset.t()}
   def update_server_year_log(%ServerYearLog{} = server_year_log, attrs) do
     server_year_log
     |> ServerYearLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.ServerYearLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_server_year_log(ServerYearLog.t) :: {:ok, ServerYearLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_server_year_log(ServerYearLog.t()) ::
+          {:ok, ServerYearLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_server_year_log(%ServerYearLog{} = server_year_log) do
     Repo.delete(server_year_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.ServerYearLogLib do
       %Ecto.Changeset{data: %ServerYearLog{}}
 
   """
-  @spec change_server_year_log(ServerYearLog.t, map) :: Ecto.Changeset.t
+  @spec change_server_year_log(ServerYearLog.t(), map) :: Ecto.Changeset.t()
   def change_server_year_log(%ServerYearLog{} = server_year_log, attrs \\ %{}) do
     ServerYearLog.changeset(server_year_log, attrs)
   end

@@ -21,6 +21,8 @@ defmodule Teiserver.Settings.UserSetting do
     timestamps()
   end
 
+  @type key :: String.t()
+
   @type t :: %__MODULE__{
           id: non_neg_integer(),
           user_id: Teiserver.user_id(),

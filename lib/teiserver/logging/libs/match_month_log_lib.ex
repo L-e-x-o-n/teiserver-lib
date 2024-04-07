@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.MatchMonthLogLib do
   def get_match_month_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> MatchMonthLogQueries.match_month_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.MatchMonthLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_match_month_log(map) :: {:ok, MatchMonthLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_match_month_log(map) :: {:ok, MatchMonthLog.t()} | {:error, Ecto.Changeset.t()}
   def create_match_month_log(attrs) do
     %MatchMonthLog{}
     |> MatchMonthLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.MatchMonthLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_match_month_log(MatchMonthLog.t, map) :: {:ok, MatchMonthLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_match_month_log(MatchMonthLog.t(), map) ::
+          {:ok, MatchMonthLog.t()} | {:error, Ecto.Changeset.t()}
   def update_match_month_log(%MatchMonthLog{} = match_month_log, attrs) do
     match_month_log
     |> MatchMonthLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.MatchMonthLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_match_month_log(MatchMonthLog.t) :: {:ok, MatchMonthLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_match_month_log(MatchMonthLog.t()) ::
+          {:ok, MatchMonthLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_match_month_log(%MatchMonthLog{} = match_month_log) do
     Repo.delete(match_month_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.MatchMonthLogLib do
       %Ecto.Changeset{data: %MatchMonthLog{}}
 
   """
-  @spec change_match_month_log(MatchMonthLog.t, map) :: Ecto.Changeset.t
+  @spec change_match_month_log(MatchMonthLog.t(), map) :: Ecto.Changeset.t()
   def change_match_month_log(%MatchMonthLog{} = match_month_log, attrs \\ %{}) do
     MatchMonthLog.changeset(match_month_log, attrs)
   end

@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.ServerQuarterLogLib do
   def get_server_quarter_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> ServerQuarterLogQueries.server_quarter_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,8 @@ defmodule Teiserver.Logging.ServerQuarterLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_server_quarter_log(map) :: {:ok, ServerQuarterLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_server_quarter_log(map) ::
+          {:ok, ServerQuarterLog.t()} | {:error, Ecto.Changeset.t()}
   def create_server_quarter_log(attrs) do
     %ServerQuarterLog{}
     |> ServerQuarterLog.changeset(attrs)
@@ -96,7 +97,8 @@ defmodule Teiserver.Logging.ServerQuarterLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_server_quarter_log(ServerQuarterLog.t, map) :: {:ok, ServerQuarterLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_server_quarter_log(ServerQuarterLog.t(), map) ::
+          {:ok, ServerQuarterLog.t()} | {:error, Ecto.Changeset.t()}
   def update_server_quarter_log(%ServerQuarterLog{} = server_quarter_log, attrs) do
     server_quarter_log
     |> ServerQuarterLog.changeset(attrs)
@@ -115,7 +117,8 @@ defmodule Teiserver.Logging.ServerQuarterLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_server_quarter_log(ServerQuarterLog.t) :: {:ok, ServerQuarterLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_server_quarter_log(ServerQuarterLog.t()) ::
+          {:ok, ServerQuarterLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_server_quarter_log(%ServerQuarterLog{} = server_quarter_log) do
     Repo.delete(server_quarter_log)
   end
@@ -129,7 +132,7 @@ defmodule Teiserver.Logging.ServerQuarterLogLib do
       %Ecto.Changeset{data: %ServerQuarterLog{}}
 
   """
-  @spec change_server_quarter_log(ServerQuarterLog.t, map) :: Ecto.Changeset.t
+  @spec change_server_quarter_log(ServerQuarterLog.t(), map) :: Ecto.Changeset.t()
   def change_server_quarter_log(%ServerQuarterLog{} = server_quarter_log, attrs \\ %{}) do
     ServerQuarterLog.changeset(server_quarter_log, attrs)
   end

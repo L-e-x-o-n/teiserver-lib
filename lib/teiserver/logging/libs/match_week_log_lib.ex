@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.MatchWeekLogLib do
   def get_match_week_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> MatchWeekLogQueries.match_week_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.MatchWeekLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_match_week_log(map) :: {:ok, MatchWeekLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_match_week_log(map) :: {:ok, MatchWeekLog.t()} | {:error, Ecto.Changeset.t()}
   def create_match_week_log(attrs) do
     %MatchWeekLog{}
     |> MatchWeekLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.MatchWeekLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_match_week_log(MatchWeekLog.t, map) :: {:ok, MatchWeekLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_match_week_log(MatchWeekLog.t(), map) ::
+          {:ok, MatchWeekLog.t()} | {:error, Ecto.Changeset.t()}
   def update_match_week_log(%MatchWeekLog{} = match_week_log, attrs) do
     match_week_log
     |> MatchWeekLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.MatchWeekLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_match_week_log(MatchWeekLog.t) :: {:ok, MatchWeekLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_match_week_log(MatchWeekLog.t()) ::
+          {:ok, MatchWeekLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_match_week_log(%MatchWeekLog{} = match_week_log) do
     Repo.delete(match_week_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.MatchWeekLogLib do
       %Ecto.Changeset{data: %MatchWeekLog{}}
 
   """
-  @spec change_match_week_log(MatchWeekLog.t, map) :: Ecto.Changeset.t
+  @spec change_match_week_log(MatchWeekLog.t(), map) :: Ecto.Changeset.t()
   def change_match_week_log(%MatchWeekLog{} = match_week_log, attrs \\ %{}) do
     MatchWeekLog.changeset(match_week_log, attrs)
   end

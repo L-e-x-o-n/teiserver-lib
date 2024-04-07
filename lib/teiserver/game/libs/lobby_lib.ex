@@ -377,7 +377,9 @@ defmodule Teiserver.Game.LobbyLib do
     })
   end
 
-  @doc false
+  @doc """
+  Returns a boolean regarding the existence of the lobby.
+  """
   @spec lobby_exists?(Lobby.id()) :: boolean
   def lobby_exists?(lobby_id) do
     case Horde.Registry.lookup(Teiserver.LobbyRegistry, lobby_id) do

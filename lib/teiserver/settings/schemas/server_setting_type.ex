@@ -30,7 +30,7 @@ defmodule Teiserver.Settings.ServerSettingType do
 
     field(:permissions, String.t() | [String.t()] | nil, default: nil)
     field(:choices, [String.t()] | nil, default: nil)
-    field(:default, String.t() | Integer.t() | boolean | nil, default: nil)
+    field(:default, String.t() | integer() | boolean | nil, default: nil)
     field(:description, String.t() | nil, default: nil)
   end
 end

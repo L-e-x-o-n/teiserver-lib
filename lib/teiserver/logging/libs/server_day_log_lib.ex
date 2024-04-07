@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.ServerDayLogLib do
   def get_server_day_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> ServerDayLogQueries.server_day_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.ServerDayLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_server_day_log(map) :: {:ok, ServerDayLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_server_day_log(map) :: {:ok, ServerDayLog.t()} | {:error, Ecto.Changeset.t()}
   def create_server_day_log(attrs) do
     %ServerDayLog{}
     |> ServerDayLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.ServerDayLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_server_day_log(ServerDayLog.t, map) :: {:ok, ServerDayLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_server_day_log(ServerDayLog.t(), map) ::
+          {:ok, ServerDayLog.t()} | {:error, Ecto.Changeset.t()}
   def update_server_day_log(%ServerDayLog{} = server_day_log, attrs) do
     server_day_log
     |> ServerDayLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.ServerDayLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_server_day_log(ServerDayLog.t) :: {:ok, ServerDayLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_server_day_log(ServerDayLog.t()) ::
+          {:ok, ServerDayLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_server_day_log(%ServerDayLog{} = server_day_log) do
     Repo.delete(server_day_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.ServerDayLogLib do
       %Ecto.Changeset{data: %ServerDayLog{}}
 
   """
-  @spec change_server_day_log(ServerDayLog.t, map) :: Ecto.Changeset.t
+  @spec change_server_day_log(ServerDayLog.t(), map) :: Ecto.Changeset.t()
   def change_server_day_log(%ServerDayLog{} = server_day_log, attrs \\ %{}) do
     ServerDayLog.changeset(server_day_log, attrs)
   end

@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.MatchQuarterLogLib do
   def get_match_quarter_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> MatchQuarterLogQueries.match_quarter_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.MatchQuarterLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_match_quarter_log(map) :: {:ok, MatchQuarterLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_match_quarter_log(map) :: {:ok, MatchQuarterLog.t()} | {:error, Ecto.Changeset.t()}
   def create_match_quarter_log(attrs) do
     %MatchQuarterLog{}
     |> MatchQuarterLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.MatchQuarterLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_match_quarter_log(MatchQuarterLog.t, map) :: {:ok, MatchQuarterLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_match_quarter_log(MatchQuarterLog.t(), map) ::
+          {:ok, MatchQuarterLog.t()} | {:error, Ecto.Changeset.t()}
   def update_match_quarter_log(%MatchQuarterLog{} = match_quarter_log, attrs) do
     match_quarter_log
     |> MatchQuarterLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.MatchQuarterLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_match_quarter_log(MatchQuarterLog.t) :: {:ok, MatchQuarterLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_match_quarter_log(MatchQuarterLog.t()) ::
+          {:ok, MatchQuarterLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_match_quarter_log(%MatchQuarterLog{} = match_quarter_log) do
     Repo.delete(match_quarter_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.MatchQuarterLogLib do
       %Ecto.Changeset{data: %MatchQuarterLog{}}
 
   """
-  @spec change_match_quarter_log(MatchQuarterLog.t, map) :: Ecto.Changeset.t
+  @spec change_match_quarter_log(MatchQuarterLog.t(), map) :: Ecto.Changeset.t()
   def change_match_quarter_log(%MatchQuarterLog{} = match_quarter_log, attrs \\ %{}) do
     MatchQuarterLog.changeset(match_quarter_log, attrs)
   end

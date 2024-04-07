@@ -36,7 +36,7 @@ To remove a client from a lobby you will need to call `Teiserver.Game.remove_cli
 - The lobby state will be updated to remove this user from the member, spectator and player lists as appropriate
 
 ### Client updates
-Typically a client will update via `Teiserver.Connections.update_client/2` but if you want to update the lobby details of a client you should use `Teiserver.Connections.update_client_in_lobby/2`.
+Typically a client will update via `Teiserver.Connections.update_client/3` but if you want to update the lobby details of a client you should use `Teiserver.Connections.update_client_in_lobby/3`.
 
 The standard `update_client` only contacts the ClientServer to update values but with the `update_client_in_lobby` function the ClientServer will check with the LobbyServer before updating any details to ensure it is allowed to.
 

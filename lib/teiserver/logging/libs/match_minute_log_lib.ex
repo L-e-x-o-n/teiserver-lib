@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.MatchMinuteLogLib do
   def get_match_minute_log(timestamp, query_args \\ []) do
     (query_args ++ [timestamp: timestamp])
     |> MatchMinuteLogQueries.match_minute_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.MatchMinuteLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_match_minute_log(map) :: {:ok, MatchMinuteLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_match_minute_log(map) :: {:ok, MatchMinuteLog.t()} | {:error, Ecto.Changeset.t()}
   def create_match_minute_log(attrs) do
     %MatchMinuteLog{}
     |> MatchMinuteLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.MatchMinuteLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_match_minute_log(MatchMinuteLog.t, map) :: {:ok, MatchMinuteLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_match_minute_log(MatchMinuteLog.t(), map) ::
+          {:ok, MatchMinuteLog.t()} | {:error, Ecto.Changeset.t()}
   def update_match_minute_log(%MatchMinuteLog{} = match_minute_log, attrs) do
     match_minute_log
     |> MatchMinuteLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.MatchMinuteLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_match_minute_log(MatchMinuteLog.t) :: {:ok, MatchMinuteLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_match_minute_log(MatchMinuteLog.t()) ::
+          {:ok, MatchMinuteLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_match_minute_log(%MatchMinuteLog{} = match_minute_log) do
     Repo.delete(match_minute_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.MatchMinuteLogLib do
       %Ecto.Changeset{data: %MatchMinuteLog{}}
 
   """
-  @spec change_match_minute_log(MatchMinuteLog.t, map) :: Ecto.Changeset.t
+  @spec change_match_minute_log(MatchMinuteLog.t(), map) :: Ecto.Changeset.t()
   def change_match_minute_log(%MatchMinuteLog{} = match_minute_log, attrs \\ %{}) do
     MatchMinuteLog.changeset(match_minute_log, attrs)
   end

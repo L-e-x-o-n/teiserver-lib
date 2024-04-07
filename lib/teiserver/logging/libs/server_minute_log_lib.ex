@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.ServerMinuteLogLib do
   def get_server_minute_log(timestamp, query_args \\ []) do
     (query_args ++ [timestamp: timestamp])
     |> ServerMinuteLogQueries.server_minute_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.ServerMinuteLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_server_minute_log(map) :: {:ok, ServerMinuteLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_server_minute_log(map) :: {:ok, ServerMinuteLog.t()} | {:error, Ecto.Changeset.t()}
   def create_server_minute_log(attrs) do
     %ServerMinuteLog{}
     |> ServerMinuteLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.ServerMinuteLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_server_minute_log(ServerMinuteLog.t, map) :: {:ok, ServerMinuteLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_server_minute_log(ServerMinuteLog.t(), map) ::
+          {:ok, ServerMinuteLog.t()} | {:error, Ecto.Changeset.t()}
   def update_server_minute_log(%ServerMinuteLog{} = server_minute_log, attrs) do
     server_minute_log
     |> ServerMinuteLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.ServerMinuteLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_server_minute_log(ServerMinuteLog.t) :: {:ok, ServerMinuteLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_server_minute_log(ServerMinuteLog.t()) ::
+          {:ok, ServerMinuteLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_server_minute_log(%ServerMinuteLog{} = server_minute_log) do
     Repo.delete(server_minute_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.ServerMinuteLogLib do
       %Ecto.Changeset{data: %ServerMinuteLog{}}
 
   """
-  @spec change_server_minute_log(ServerMinuteLog.t, map) :: Ecto.Changeset.t
+  @spec change_server_minute_log(ServerMinuteLog.t(), map) :: Ecto.Changeset.t()
   def change_server_minute_log(%ServerMinuteLog{} = server_minute_log, attrs \\ %{}) do
     ServerMinuteLog.changeset(server_minute_log, attrs)
   end

@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.ServerWeekLogLib do
   def get_server_week_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> ServerWeekLogQueries.server_week_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.ServerWeekLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_server_week_log(map) :: {:ok, ServerWeekLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_server_week_log(map) :: {:ok, ServerWeekLog.t()} | {:error, Ecto.Changeset.t()}
   def create_server_week_log(attrs) do
     %ServerWeekLog{}
     |> ServerWeekLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.ServerWeekLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_server_week_log(ServerWeekLog.t, map) :: {:ok, ServerWeekLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_server_week_log(ServerWeekLog.t(), map) ::
+          {:ok, ServerWeekLog.t()} | {:error, Ecto.Changeset.t()}
   def update_server_week_log(%ServerWeekLog{} = server_week_log, attrs) do
     server_week_log
     |> ServerWeekLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.ServerWeekLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_server_week_log(ServerWeekLog.t) :: {:ok, ServerWeekLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_server_week_log(ServerWeekLog.t()) ::
+          {:ok, ServerWeekLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_server_week_log(%ServerWeekLog{} = server_week_log) do
     Repo.delete(server_week_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.ServerWeekLogLib do
       %Ecto.Changeset{data: %ServerWeekLog{}}
 
   """
-  @spec change_server_week_log(ServerWeekLog.t, map) :: Ecto.Changeset.t
+  @spec change_server_week_log(ServerWeekLog.t(), map) :: Ecto.Changeset.t()
   def change_server_week_log(%ServerWeekLog{} = server_week_log, attrs \\ %{}) do
     ServerWeekLog.changeset(server_week_log, attrs)
   end

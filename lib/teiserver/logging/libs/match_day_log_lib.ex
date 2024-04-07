@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.MatchDayLogLib do
   def get_match_day_log(date, query_args \\ []) do
     (query_args ++ [date: date])
     |> MatchDayLogQueries.match_day_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -77,7 +77,7 @@ defmodule Teiserver.Logging.MatchDayLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_match_day_log(map) :: {:ok, MatchDayLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_match_day_log(map) :: {:ok, MatchDayLog.t()} | {:error, Ecto.Changeset.t()}
   def create_match_day_log(attrs) do
     %MatchDayLog{}
     |> MatchDayLog.changeset(attrs)
@@ -96,7 +96,8 @@ defmodule Teiserver.Logging.MatchDayLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_match_day_log(MatchDayLog.t, map) :: {:ok, MatchDayLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_match_day_log(MatchDayLog.t(), map) ::
+          {:ok, MatchDayLog.t()} | {:error, Ecto.Changeset.t()}
   def update_match_day_log(%MatchDayLog{} = match_day_log, attrs) do
     match_day_log
     |> MatchDayLog.changeset(attrs)
@@ -115,7 +116,8 @@ defmodule Teiserver.Logging.MatchDayLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_match_day_log(MatchDayLog.t) :: {:ok, MatchDayLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_match_day_log(MatchDayLog.t()) ::
+          {:ok, MatchDayLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_match_day_log(%MatchDayLog{} = match_day_log) do
     Repo.delete(match_day_log)
   end
@@ -129,7 +131,7 @@ defmodule Teiserver.Logging.MatchDayLogLib do
       %Ecto.Changeset{data: %MatchDayLog{}}
 
   """
-  @spec change_match_day_log(MatchDayLog.t, map) :: Ecto.Changeset.t
+  @spec change_match_day_log(MatchDayLog.t(), map) :: Ecto.Changeset.t()
   def change_match_day_log(%MatchDayLog{} = match_day_log, attrs \\ %{}) do
     MatchDayLog.changeset(match_day_log, attrs)
   end

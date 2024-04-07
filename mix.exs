@@ -2,7 +2,7 @@ defmodule Teiserver.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/Teifion/teiserver"
-  @version "0.0.4"
+  @version "0.0.5"
 
   def project do
     [
@@ -167,7 +167,22 @@ defmodule Teiserver.MixProject do
 
       # Settings
       "Site settings": &(&1[:section] == :server_setting),
-      "User settings": &(&1[:section] == :user_setting)
+      "User settings": &(&1[:section] == :user_setting),
+
+      # Logging
+      "Audit logs": &(&1[:section] == :audit_log),
+      "Match minute logs": &(&1[:section] == :match_minute_log),
+      "Match day logs": &(&1[:section] == :match_day_log),
+      "Match week logs": &(&1[:section] == :match_week_log),
+      "Match month logs": &(&1[:section] == :match_month_log),
+      "Match quarter logs": &(&1[:section] == :match_quarter_log),
+      "Match year logs": &(&1[:section] == :match_year_log),
+      "Server minute logs": &(&1[:section] == :server_minute_log),
+      "Server day logs": &(&1[:section] == :server_day_log),
+      "Server week logs": &(&1[:section] == :server_week_log),
+      "Server month logs": &(&1[:section] == :server_month_log),
+      "Server quarter logs": &(&1[:section] == :server_quarter_log),
+      "Server year logs": &(&1[:section] == :server_year_log)
     ]
   end
 
