@@ -79,6 +79,18 @@ defmodule Teiserver.Settings.UserSettingQueries do
     )
   end
 
+  def _where(query, :updated_after, timestamp) do
+    from(user_settings in query,
+      where: user_settings.updated_at >= ^timestamp
+    )
+  end
+
+  def _where(query, :updated_before, timestamp) do
+    from(user_settings in query,
+      where: user_settings.updated_at < ^timestamp
+    )
+  end
+
   @spec do_order_by(Ecto.Query.t(), list | nil) :: Ecto.Query.t()
   defp do_order_by(query, nil), do: query
 

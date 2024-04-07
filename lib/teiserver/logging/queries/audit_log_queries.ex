@@ -33,73 +33,83 @@ defmodule Teiserver.Logging.AuditLogQueries do
   def _where(query, _, nil), do: query
 
   def _where(query, :id, id_list) when is_list(id_list) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: audit_logs.id in ^id_list
+    )
   end
 
   def _where(query, :id, id) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: audit_logs.id == ^id
+    )
   end
 
   def _where(query, :action, action_list) when is_list(action_list) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: audit_logs.action in ^action_list
+    )
   end
 
   def _where(query, :action, action) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: audit_logs.action == ^action
+    )
   end
 
   def _where(query, :detail_equal, {field, value}) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: fragment("? ->> ? = ?", audit_logs.details, ^field, ^value)
+    )
   end
 
   def _where(query, :detail_greater_than, {field, value}) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: fragment("? ->> ? > ?", audit_logs.details, ^field, ^value)
+    )
   end
 
   def _where(query, :detail_less_than, {field, value}) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: fragment("? ->> ? < ?", audit_logs.details, ^field, ^value)
+    )
   end
 
   def _where(query, :detail_not, {field, value}) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: fragment("? ->> ? != ?", audit_logs.details, ^field, ^value)
+    )
   end
 
-
   def _where(query, :inserted_after, timestamp) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: audit_logs.inserted_at >= ^timestamp
+    )
   end
 
   def _where(query, :inserted_before, timestamp) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: audit_logs.inserted_at < ^timestamp
+    )
   end
 
   def _where(query, :updated_after, timestamp) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: audit_logs.updated_at >= ^timestamp
+    )
   end
 
   def _where(query, :updated_before, timestamp) do
-    from audit_logs in query,
+    from(audit_logs in query,
       where: audit_logs.updated_at < ^timestamp
+    )
   end
-
 
   @spec do_order_by(Ecto.Query.t(), list | nil) :: Ecto.Query.t()
   defp do_order_by(query, nil), do: query
 
   defp do_order_by(query, params) when is_list(params) do
     params
-    |> List.wrap
+    |> List.wrap()
     |> Enum.reduce(query, fn key, query_acc ->
       _order_by(query_acc, key)
     end)
@@ -107,22 +117,23 @@ defmodule Teiserver.Logging.AuditLogQueries do
 
   @spec _order_by(Ecto.Query.t(), any()) :: Ecto.Query.t()
   def _order_by(query, "Newest first") do
-    from audit_logs in query,
+    from(audit_logs in query,
       order_by: [desc: audit_logs.inserted_at]
+    )
   end
 
   def _order_by(query, "Oldest first") do
-    from audit_logs in query,
+    from(audit_logs in query,
       order_by: [asc: audit_logs.inserted_at]
+    )
   end
-
 
   @spec do_preload(Ecto.Query.t(), List.t() | nil) :: Ecto.Query.t()
   defp do_preload(query, nil), do: query
 
   defp do_preload(query, preloads) do
     preloads
-    |> List.wrap
+    |> List.wrap()
     |> Enum.reduce(query, fn key, query_acc ->
       _preload(query_acc, key)
     end)
@@ -130,8 +141,9 @@ defmodule Teiserver.Logging.AuditLogQueries do
 
   @spec _preload(Ecto.Query.t(), any) :: Ecto.Query.t()
   def _preload(query, :user) do
-    from audit_log in query,
+    from(audit_log in query,
       left_join: users in assoc(audit_log, :user),
       preload: [user: users]
+    )
   end
 end

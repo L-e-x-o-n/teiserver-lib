@@ -62,7 +62,7 @@ defmodule Teiserver.Logging.AuditLogLib do
   def get_audit_log(audit_log_id, query_args \\ []) do
     (query_args ++ [id: audit_log_id])
     |> AuditLogQueries.audit_log_query()
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -80,14 +80,15 @@ defmodule Teiserver.Logging.AuditLogLib do
       {:ok, %AuditLog{}}
 
   """
-  @spec create_audit_log(map) :: {:ok, AuditLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_audit_log(map) :: {:ok, AuditLog.t()} | {:error, Ecto.Changeset.t()}
   def create_audit_log(attrs) do
     %AuditLog{}
     |> AuditLog.changeset(attrs)
     |> Repo.insert()
   end
 
-  @spec create_audit_log(Teiserver.user_id(), String.t(), String.t(), map()) :: {:ok, AuditLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_audit_log(Teiserver.user_id(), String.t(), String.t(), map()) ::
+          {:ok, AuditLog.t()} | {:error, Ecto.Changeset.t()}
   def create_audit_log(user_id, ip, action, details) do
     %AuditLog{}
     |> AuditLog.changeset(%{
@@ -102,7 +103,8 @@ defmodule Teiserver.Logging.AuditLogLib do
   @doc """
   See `create_audit_log/4`, this is the same but without a user.
   """
-  @spec create_anonymous_audit_log(String.t(), String.t(), map()) :: {:ok, AuditLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_anonymous_audit_log(String.t(), String.t(), map()) ::
+          {:ok, AuditLog.t()} | {:error, Ecto.Changeset.t()}
   def create_anonymous_audit_log(ip, action, details) do
     %AuditLog{}
     |> AuditLog.changeset(%{
@@ -125,7 +127,7 @@ defmodule Teiserver.Logging.AuditLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_audit_log(AuditLog.t, map) :: {:ok, AuditLog.t} | {:error, Ecto.Changeset.t}
+  @spec update_audit_log(AuditLog.t(), map) :: {:ok, AuditLog.t()} | {:error, Ecto.Changeset.t()}
   def update_audit_log(%AuditLog{} = audit_log, attrs) do
     audit_log
     |> AuditLog.changeset(attrs)
@@ -144,7 +146,7 @@ defmodule Teiserver.Logging.AuditLogLib do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec delete_audit_log(AuditLog.t) :: {:ok, AuditLog.t} | {:error, Ecto.Changeset.t}
+  @spec delete_audit_log(AuditLog.t()) :: {:ok, AuditLog.t()} | {:error, Ecto.Changeset.t()}
   def delete_audit_log(%AuditLog{} = audit_log) do
     Repo.delete(audit_log)
   end
@@ -158,7 +160,7 @@ defmodule Teiserver.Logging.AuditLogLib do
       %Ecto.Changeset{data: %AuditLog{}}
 
   """
-  @spec change_audit_log(AuditLog.t, map) :: Ecto.Changeset.t
+  @spec change_audit_log(AuditLog.t(), map) :: Ecto.Changeset.t()
   def change_audit_log(%AuditLog{} = audit_log, attrs \\ %{}) do
     AuditLog.changeset(audit_log, attrs)
   end

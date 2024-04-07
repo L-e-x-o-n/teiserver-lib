@@ -69,6 +69,7 @@ defmodule Teiserver.AuditLogLibTest do
 
     test "create_audit_log/4 with valid data creates a audit_log" do
       user_id = AccountFixtures.user_fixture().id
+
       assert {:ok, %AuditLog{} = audit_log} =
                Logging.create_audit_log(user_id, "ip", "some action", %{})
 

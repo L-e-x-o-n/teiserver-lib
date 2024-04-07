@@ -282,9 +282,11 @@ defmodule Teiserver.Api do
   # Logging
   alias Teiserver.Logging.AuditLogLib
 
-  @spec create_audit_log(Teiserver.user_id(), String.t(), String.t(), map()) :: {:ok, AuditLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_audit_log(Teiserver.user_id(), String.t(), String.t(), map()) ::
+          {:ok, AuditLog.t()} | {:error, Ecto.Changeset.t()}
   defdelegate create_audit_log(user_id, ip, action, details), to: AuditLogLib
 
-  @spec create_anonymous_audit_log(String.t(), String.t(), map()) :: {:ok, AuditLog.t} | {:error, Ecto.Changeset.t}
+  @spec create_anonymous_audit_log(String.t(), String.t(), map()) ::
+          {:ok, AuditLog.t()} | {:error, Ecto.Changeset.t()}
   defdelegate create_anonymous_audit_log(ip, action, details), to: AuditLogLib
 end
