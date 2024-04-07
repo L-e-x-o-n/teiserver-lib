@@ -42,19 +42,7 @@ defmodule Teiserver.Application do
       add_cache(:ts_server_setting_cache, ttl: :timer.minutes(1)),
       add_cache(:ts_user_setting_type_store),
       add_cache(:ts_user_setting_cache, ttl: :timer.minutes(1)),
-      add_cache(:ts_user_by_user_id_cache, ttl: :timer.minutes(5)),
-
-      # Telemetry caches
-      add_cache(:ts_property_types_cache),
-      add_cache(:ts_simple_client_event_types_cache),
-      add_cache(:ts_complex_client_event_types_cache),
-      add_cache(:ts_simple_lobby_event_types_cache),
-      add_cache(:ts_complex_lobby_event_types_cache),
-      add_cache(:ts_simple_match_event_types_cache),
-      add_cache(:ts_complex_match_event_types_cache),
-      add_cache(:ts_simple_server_event_types_cache),
-      add_cache(:ts_complex_server_event_types_cache),
-      add_cache(:ts_account_smurf_key_types)
+      add_cache(:ts_user_by_user_id_cache, ttl: :timer.minutes(5))
     ]
 
     opts = [strategy: :one_for_one, name: __MODULE__]

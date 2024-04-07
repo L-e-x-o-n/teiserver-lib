@@ -2,9 +2,7 @@
 - Swapped `team_colour` for `player_colour`
 - Refactored the client update process
 - Added User and Server runtime settings
-- Added logging for server and match usage
 - Added Telemetry events
-
 
 ## v0.0.4
 - Added `Lobby`, `LobbySummary`, `MatchType`, `Match`, `MatchMembership`, `MatchSettingType`, `MatchSetting` schemas, libs and queries

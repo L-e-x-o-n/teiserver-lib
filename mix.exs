@@ -59,7 +59,7 @@ defmodule Teiserver.MixProject do
       "documentation/guides/program_structure.md",
       "documentation/guides/snippets.md",
       "documentation/guides/match_lifecycle.md",
-      "documentation/guides/telemetry_events.md",
+      "documentation/guides/testing.md",
 
       # Development
       "documentation/development/features.md",
@@ -70,6 +70,8 @@ defmodule Teiserver.MixProject do
       "documentation/pubsubs/match.md",
       "documentation/pubsubs/user.md",
       "documentation/pubsubs/communication.md",
+
+      # KW maps
       "CHANGELOG.md": [title: "Changelog"]
     ]
   end
@@ -94,8 +96,7 @@ defmodule Teiserver.MixProject do
         Teiserver.Logging,
         Teiserver.Matchmaking,
         Teiserver.Moderation,
-        Teiserver.Settings,
-        Teiserver.Telemetry
+        Teiserver.Settings
       ],
       Account: [
         ~r"Teiserver.Account.*"
@@ -126,9 +127,6 @@ defmodule Teiserver.MixProject do
       ],
       Settings: [
         ~r"Teiserver.Settings.*"
-      ],
-      Telemetry: [
-        ~r"Teiserver.Telemetry.*"
       ],
       Helpers: [
         ~r"Teiserver.Helpers.*"
@@ -240,8 +238,7 @@ defmodule Teiserver.MixProject do
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_pubsub, "~> 2.1"},
-      {:telemetry_metrics, "~> 0.6"},
-      {:telemetry_poller, "~> 1.0"},
+      {:telemetry, "~> 1.2.1"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:argon2_elixir, "~> 3.0"},

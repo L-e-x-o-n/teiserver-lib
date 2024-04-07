@@ -20,7 +20,6 @@ _Note: This README is for the unreleased master branch, please reference the
 - User connectivity
 - User to User communications
 - Lobby system (planned)
-- Telemetry/Event logging (planned)
 - Community management tools (planned)
 - Steam integration (planned)
 

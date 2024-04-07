@@ -58,6 +58,8 @@ A function used to determine if a lobby name is acceptable. Defaults to `Teiserv
 ## `fn_uuid_generator`
 The function used to generate UUIDs. Defaults to `&Ecto.UUID.generate/0`.
 
+# Function extensions
+Teiserver has a number of functions which you will likely want to extend.
 
 # Complete example config
 ```elixir

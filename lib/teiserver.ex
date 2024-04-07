@@ -41,7 +41,6 @@ defmodule Teiserver do
   - **Logging**: Logging of events and numbers
   - **Moderation**: Handling disruptive users
   - **Settings**: Key-Value pairs for users and the system
-  - **Telemetry**: Moment to moment events
   """
 
   # Aliased types

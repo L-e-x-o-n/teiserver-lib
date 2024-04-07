@@ -38,7 +38,7 @@ defmodule Teiserver.System.ClusterManagerSupervisor do
   defp start_cluster_manager() do
     case DynamicSupervisor.start_child(
            __MODULE__,
-           {Teiserver.System.ClusterManager, []}
+           {Teiserver.System.ClusterMemberServer, []}
          ) do
       {:ok, _pid} ->
         :ok
