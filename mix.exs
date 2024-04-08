@@ -59,6 +59,7 @@ defmodule Teiserver.MixProject do
       "documentation/guides/program_structure.md",
       "documentation/guides/snippets.md",
       "documentation/guides/match_lifecycle.md",
+      "documentation/guides/telemetry.md",
       "documentation/guides/testing.md",
 
       # Development

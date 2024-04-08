@@ -38,8 +38,20 @@ defmodule Teiserver.Connections.ClientServer do
     new_connections = Enum.uniq([conn_pid | state.connections])
 
     if state.client.connected? do
+      :telemetry.execute(
+        [:teiserver, :client, :added_connection],
+        %{},
+        %{user_id: state.user_id}
+      )
+
       {:noreply, %State{state | connections: new_connections}}
     else
+      :telemetry.execute(
+        [:teiserver, :client, :new_connection],
+        %{},
+        %{user_id: state.user_id}
+      )
+
       new_client = %{state.client | connected?: true}
 
       Teiserver.broadcast(state.client_topic, %{
@@ -56,6 +68,12 @@ defmodule Teiserver.Connections.ClientServer do
     if Enum.empty?(partial_client) do
       {:noreply, state}
     else
+      :telemetry.execute(
+        [:teiserver, :client, :updated],
+        %{},
+        %{user_id: state.user_id}
+      )
+
       new_client = struct(state.client, partial_client)
       new_state = update_client(state, new_client, reason)
       {:noreply, new_state}
@@ -78,6 +96,12 @@ defmodule Teiserver.Connections.ClientServer do
   end
 
   def handle_cast({:do_update_client_in_lobby, new_client, reason}, state) do
+    :telemetry.execute(
+      [:teiserver, :client, :update_in_lobby],
+      %{},
+      %{user_id: state.user_id}
+    )
+
     new_state = update_client(state, new_client, reason)
     {:noreply, new_state}
   end
@@ -86,6 +110,12 @@ defmodule Teiserver.Connections.ClientServer do
   # and thus we don't want to keep the client alive
   def handle_cast({:purposeful_disconnect, pid}, state) do
     new_state = lose_connection(pid, state)
+
+    :telemetry.execute(
+      [:teiserver, :client, :disconnect],
+      %{reason: :purposeful},
+      %{user_id: state.user_id}
+    )
 
     if new_state.client.connected? do
       {:noreply, new_state}
@@ -112,6 +142,12 @@ defmodule Teiserver.Connections.ClientServer do
   end
 
   def handle_info({:DOWN, _ref, :process, pid, _normal}, state) do
+    :telemetry.execute(
+      [:teiserver, :client, :disconnect],
+      %{reason: :down_message},
+      %{user_id: state.user_id}
+    )
+
     new_state = lose_connection(pid, state)
     {:noreply, new_state}
   end

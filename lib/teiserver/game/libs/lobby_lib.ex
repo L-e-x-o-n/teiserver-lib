@@ -257,7 +257,8 @@ defmodule Teiserver.Game.LobbyLib do
         rated?: true,
         host_id: host_id,
         processed?: false,
-        lobby_opened_at: Timex.now()
+        lobby_opened_at: Timex.now(),
+        lobby_id: lobby_id
       })
 
     cast_lobby(lobby_id, {:cycle_lobby, match.id})
@@ -277,6 +278,23 @@ defmodule Teiserver.Game.LobbyLib do
   @spec lobby_start_match(Lobby.id()) :: :ok
   def lobby_start_match(lobby_id) when is_binary(lobby_id) do
     cast_lobby(lobby_id, :lobby_start_match)
+  end
+
+  @doc """
+  Used to tell a lobby process the current match has stopped. Optionally provide a reason as to why
+
+  ## Examples
+
+      iex> lobby_end_match(123, "reason")
+      :ok
+
+      iex> lobby_end_match(456, "reason")
+      nil
+  """
+  @spec lobby_end_match(Lobby.id()) :: :ok
+  @spec lobby_end_match(Lobby.id(), String.t()) :: :ok
+  def lobby_end_match(lobby_id, reason \\ "normal") when is_binary(lobby_id) do
+    cast_lobby(lobby_id, {:lobby_end_match, reason})
   end
 
   @doc """

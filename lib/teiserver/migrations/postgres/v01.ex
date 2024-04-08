@@ -72,6 +72,8 @@ defmodule Teiserver.Migrations.Postgres.V01 do
       add(:public?, :boolean)
       add(:rated?, :boolean)
 
+      add(:lobby_id, :uuid)
+
       add(:game_name, :string)
       add(:game_version, :string)
 

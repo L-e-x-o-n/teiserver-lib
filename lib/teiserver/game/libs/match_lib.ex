@@ -1,6 +1,6 @@
 defmodule Teiserver.Game.MatchLib do
   @moduledoc """
-  TODO: Library of match related functions.
+  Library of match related functions.
   """
   use TeiserverMacros, :library
   alias Teiserver.Game.{Match, MatchQueries, Lobby, MatchTypeLib}
@@ -126,6 +126,9 @@ defmodule Teiserver.Game.MatchLib do
 
       Game.update_match_membership(mm, attrs)
     end)
+
+    # Tell the lobby server the match has ended
+    Game.cycle_lobby(match.lobby_id)
 
     # Finally return the updated match
     updated_match

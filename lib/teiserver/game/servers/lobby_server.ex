@@ -14,7 +14,7 @@ defmodule Teiserver.Game.LobbyServer do
 
   defmodule State do
     @moduledoc false
-    defstruct [:lobby, :lobby_id, :host_id, :match_id, :lobby_topic, :match_topic, :update_id]
+    defstruct [:lobby, :lobby_id, :host_id, :match_id, :lobby_topic, :update_id]
   end
 
   @impl true
@@ -41,6 +41,11 @@ defmodule Teiserver.Game.LobbyServer do
         {:reply, {:error, reason}, state}
 
       {true, _} ->
+        :telemetry.execute(
+          [:teiserver, :lobby, :add_client],
+          %{},
+          %{user_id: user_id}
+        )
         {shared_secret, new_state} = do_add_client(user_id, state)
         {:reply, {:ok, shared_secret, state.lobby}, new_state}
     end
@@ -64,6 +69,11 @@ defmodule Teiserver.Game.LobbyServer do
 
   def handle_cast({:remove_client, user_id}, state) do
     if Enum.member?(state.lobby.members, user_id) do
+      :telemetry.execute(
+        [:teiserver, :lobby, :remove_client],
+        %{},
+        %{user_id: user_id}
+      )
       new_state = do_remove_client(user_id, state)
       {:noreply, new_state}
     else
@@ -72,9 +82,6 @@ defmodule Teiserver.Game.LobbyServer do
   end
 
   def handle_cast({:cycle_lobby, match_id}, state) do
-    match_topic = nil
-    # match_topic = Game.match_topic(match.id)
-
     new_state =
       update_lobby(state, %{
         match_id: match_id,
@@ -82,7 +89,13 @@ defmodule Teiserver.Game.LobbyServer do
         match_type: nil
       })
 
-    {:noreply, %{new_state | match_id: match_id, match_topic: match_topic}}
+    :telemetry.execute(
+      [:teiserver, :lobby, :cycle],
+      %{},
+      %{match_id: match_id}
+    )
+
+    {:noreply, %{new_state | match_id: match_id}}
   end
 
   def handle_cast(:lobby_start_match, state) do
@@ -90,6 +103,12 @@ defmodule Teiserver.Game.LobbyServer do
       update_lobby(state, %{
         match_ongoing?: true
       })
+
+    :telemetry.execute(
+      [:teiserver, :lobby, :start_match],
+      %{players: state.lobby.players},
+      %{match_id: state.match_id}
+    )
 
     {:noreply, new_state}
   end
@@ -367,8 +386,7 @@ defmodule Teiserver.Game.LobbyServer do
        host_id: lobby.host_id,
        match_id: nil,
        lobby: lobby,
-       lobby_topic: LobbyLib.lobby_topic(id),
-       match_topic: nil
+       lobby_topic: LobbyLib.lobby_topic(id)
      }}
   end
 end

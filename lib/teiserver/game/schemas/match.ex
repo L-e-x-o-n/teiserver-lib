@@ -51,6 +51,7 @@ defmodule Teiserver.Game.Match do
     field(:match_duration_seconds, :integer)
 
     # Memberships
+    field(:lobby_id, Ecto.UUID)
     belongs_to(:host, Teiserver.Account.User, type: Ecto.UUID)
     belongs_to(:type, Teiserver.Game.MatchType)
     has_many(:members, Teiserver.Game.MatchMembership)
@@ -91,6 +92,7 @@ defmodule Teiserver.Game.Match do
           # This will be something queried enough it's worth storing as it's own value
           match_duration_seconds: non_neg_integer(),
           host_id: Teiserver.user_id(),
+          lobby_id: Teiserver.lobby_id(),
           host: Teiserver.Account.User.t(),
           type_id: Teiserver.Game.MatchType.id(),
           type: Teiserver.Game.MatchType.t(),
@@ -106,7 +108,7 @@ defmodule Teiserver.Game.Match do
     struct
     |> cast(
       attrs,
-      ~w(name tags public? rated? game_name game_version winning_team team_count team_size processed? lobby_opened_at match_started_at match_ended_at ended_normally? match_duration_seconds host_id type_id)a
+      ~w(name tags public? rated? game_name game_version winning_team team_count team_size processed? lobby_opened_at match_started_at match_ended_at ended_normally? match_duration_seconds host_id type_id lobby_id)a
     )
     |> validate_required(~w(public? rated? host_id)a)
   end

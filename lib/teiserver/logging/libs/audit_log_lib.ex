@@ -98,6 +98,7 @@ defmodule Teiserver.Logging.AuditLogLib do
       details: details
     })
     |> Repo.insert()
+    |> maybe_emit_event
   end
 
   @doc """
@@ -113,7 +114,18 @@ defmodule Teiserver.Logging.AuditLogLib do
       details: details
     })
     |> Repo.insert()
+    |> maybe_emit_event
   end
+
+  defp maybe_emit_event({:ok, %AuditLog{} = audit_log}) do
+    :telemetry.execute(
+      [:teiserver, :logging, :add_audit_log],
+      %{action: audit_log.action},
+      %{log_id: audit_log.id}
+    )
+    {:ok, audit_log}
+  end
+  defp maybe_emit_event(v), do: v
 
   @doc """
   Updates a audit_log.
