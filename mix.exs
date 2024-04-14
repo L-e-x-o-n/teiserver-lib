@@ -253,8 +253,7 @@ defmodule Teiserver.MixProject do
       {:ex_doc, "~> 0.31", only: :dev, runtime: false},
       {:excoveralls, "~> 0.15.3", only: :test, runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:floki, ">= 0.34.0", only: :test},
-      {:dialyxir, "~> 1.1", only: [:dev], runtime: false}
+      {:floki, ">= 0.34.0", only: :test}
     ]
   end
 
